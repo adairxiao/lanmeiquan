@@ -1,13 +1,11 @@
 <template>
   <div class="btn">
     <van-button
-      :type="buttonType"
-      :size="buttonSize"
-      :color="buttonColor"
-      :native-type="buttonNativeType"
-      v-bind="{round:isRound}"
-    >{{buttonText}}</van-button>
+      v-bind="$attrs"
+      v-on="$listeners"
+    />
   </div>
+
 </template>
 
 <script>
@@ -20,34 +18,16 @@ export default {
     vanButton
   },
   props: {
-    buttonType: {
-      type: String,
-      default: "default"
-    },
-    buttonSize: {
-      type: String,
-      default: "normal"
-    },
-    buttonColor: {
-      type: String,
-      default: "#1DA1F1"
-    },
-    buttonText: {
-      type: String,
-      default: "确定"
-    },
-    buttonNativeType: {
-      type: String,
-      default: null
-    },
-    isRound:{
-      type:Boolean,
-      default:false
-    }
+    
+  },
+  mounted(){
+
+  },
+  methods: {
+
   }
 };
 </script>
 
 <style>
-
 </style>

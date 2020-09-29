@@ -1,6 +1,6 @@
 <template>
   <div class="form">
-    <van-form validate-first>
+    <van-form v-on="$listeners">
       <slot />
     </van-form>
   </div>
@@ -20,7 +20,13 @@ export default {
   },
   components: {
     vanForm,
-  }
+  },
+    mounted() {
+    // console.log(`$attrs:`);
+    // console.log(this.$attrs);
+    // console.log(`$listeners:`);
+    // console.log(this.$listeners);
+  },
 };
 </script>
 
