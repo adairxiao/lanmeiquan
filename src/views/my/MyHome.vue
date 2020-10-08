@@ -5,7 +5,7 @@
         <section class="user-center-info-show clearfix">
           <div class="avatar">
             <div>
-              <img src="E:\vue_project\lanmeiquan\src\assets\images\bg.png" alt />
+              <img src="@/assets/images/bg.png" alt />
             </div>
           </div>
           <div class="base-info">
@@ -19,8 +19,8 @@
         <section class="personal-operate-annal-show">
           <ul>
             <li v-for="item in operateAnnal" :key="item.title">
-              <span v-show="isUser">{{item.number}}</span>
-              <span :class="{vertical:!isUser}">{{item.title}}</span>
+              <span v-show="isUser">{{ item.number }}</span>
+              <span :class="{ vertical: !isUser }">{{ item.title }}</span>
             </li>
           </ul>
         </section>
@@ -75,8 +75,10 @@
         <ul>
           <li v-for="item in needFunctionList" :key="item.title">
             <div>
-              <span>{{item.title}}</span>
-              <i v-if="item.title==='客服中心'">{{customerServiceWeChat}}</i>
+              <span>{{ item.title }}</span>
+              <i v-if="item.title === '客服中心'">{{
+                customerServiceWeChat
+              }}</i>
               <i v-else>
                 <van-icon name="arrow" />
               </i>
@@ -155,14 +157,12 @@ export default {
     .avatar {
       display: block;
       float: left;
-      
+
       div {
         width: 58px;
         height: 58px;
         border-radius: 50%;
         background-color: aqua;
-
-
       }
     }
     .base-info {
@@ -264,13 +264,13 @@ export default {
         width: 29px;
         height: 29px;
         margin: 0 7px 0 12px;
-        background: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/photographer-icon.png")
+        background: url("~@/assets/images/images/myHome/photographer-icon.png")
           no-repeat center;
         background-size: 29px, 29px;
       }
 
       .icon-model {
-        background-image: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/model-icon.png");
+        background-image: url("~@/assets/images/images/myHome/model-icon.png");
       }
       span {
         margin-left: 48px;
@@ -309,7 +309,7 @@ export default {
         float: left;
         width: 25px;
         height: 25px;
-        background: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/model-icon.png")
+        background: url("~@/assets/images/images/myHome/model-icon.png")
           no-repeat center;
         background-size: 22px, 22px;
       }
@@ -346,16 +346,16 @@ export default {
           }
 
           .icon-my-wallet {
-            background-image: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/my-wallet.png");
+            background-image: url("~@/assets/images/images/myHome/my-wallet.png");
           }
           .icon-my-works {
-            background-image: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/my-works.png");
+            background-image: url("~@/assets/images/images/myHome/my-works.png");
           }
           .icon-publish-works {
-            background-image: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/publish-works.png");
+            background-image: url("~@/assets/images/images/myHome/publish-works.png");
           }
           .icon-info-settings {
-            background-image: url("E:/vue_project/lanmeiquan/src/assets/images/images/myHome/info-settings.png");
+            background-image: url("~@/assets/images/images/myHome/info-settings.png");
           }
         }
       }

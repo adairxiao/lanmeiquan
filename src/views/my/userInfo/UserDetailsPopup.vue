@@ -14,8 +14,7 @@
 </template>-->
 
 <script>
-const ActionSheet = () =>
-  import("@/components/common/actionsheet/actionsheet");
+const ActionSheet = () => import("@/components/common/actionsheet/actionsheet");
 
 import Popup from "../../../components/common/popup/Popup";
 import { EventBus } from "../../../router/eventBus";
@@ -33,20 +32,24 @@ export default {
       return ["性别"].includes(this.showCurrentClass);
     },
   },
-  render(createElement) {
+  render(h) {
     // 根据传入的title判断启用ActionSheet或者popup组件
-    return createElement({Popup},{
-      
-
-    }, {});
-    
+    return h(
+      Popup,
+      {
+        props: {
+          show: { isShow: true },
+        },
+      },
+      [h("h1", {}, "askfjas")]
+    );
   },
 
   // components: {
   //   ActionSheet,
   //   Popup,
   // },
-  
+
   mounted() {
     // 使用bus接受父组件中兄弟组件传的值
     // let self = this;
@@ -54,7 +57,6 @@ export default {
     //   self.showCurrentClass = title;
     //   self.popupSex();
     // });
-    
   },
   // methods: {
   //   popupSex() {
