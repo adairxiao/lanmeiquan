@@ -22,11 +22,8 @@
 </template>
 
 <script>
-import vanField from "vant/lib/field";
-import "vant/lib/field/style";
 
-import vanButton from "vant/lib/button";
-import "vant/lib/button";
+import {Field as vanField,Button as vanButton} from "vant";
 
 export default {
   data() {

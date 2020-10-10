@@ -1,106 +1,103 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-import Navbar from '@/views/navbar/Navbar'
-import Login from '@/views/login/Login.vue'
-import Forget from '@/views/forget/Forget.vue'
-import sendCode from '@/views/login/SendCode.vue'
-import foundUser from '@/views/login/FoundUser'
-
 Vue.use(VueRouter)
 
-const My = ()=>import("@/views/my/MyHome.vue")
-const userDetails = ()=>import("@/views/my/userInfo/UserDetails.vue")
-const editInfo=()=>import("@/views/my/userInfo/EditInfo.vue")
+const TabBar = () => import('components/content/Tabbar/TabBar')
+const Login = () => import('@/views/login/Login')
+const Forget = () => import('@/views/forget/Forget')
+const sendCode = () => import('@/views/login/SendCode')
+const foundUser = () => import('@/views/login/FoundUser')
 
-
-const routes = [
-
-  
-  {
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/navbar',
-    name: 'NavBer',
-    components: {
-      NavBer: Navbar,
-    }
-  },
+const login = [
   {
     path: '/login',
     name: 'Login',
-    components: {
-      default: Login,
-    }
+    meta:{title:''},
+    component: Login,
+    children: [
+      {
+        path: '',
+        component: TabBar,
+      },
+    ],
   },
 
   {
     path: '/sendCode',
     name: 'sendCode',
-    meta: { title: "" },
+    meta: { title: '' },
     components: {
       default: sendCode,
-
-    }
+    },
   },
   {
     path: '/foundUser',
     name: 'foundUser',
-    meta: { title: "" },
+    meta: { title: '' },
     components: {
       default: foundUser,
-    }
+    },
   },
   {
     path: '/forget',
     name: 'Forget',
-    meta: { title: "忘记密码" },
-    components: {
-      default: Forget,
-    }
-  },
+    meta: { title: '忘记密码' },
+    component:  Forget,
+    children:[
+      {
+        path:'',
 
-  {
-    path: '/home',
-    name: 'Home',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '@/views/home/Home.vue')
-  }
-  ,
+      }
+    ]
+  },
+]
+
+const My = () => import('@/views/my/MyHome')
+const userDetails = () => import('@/views/my/userInfo/UserDetails')
+const editInfo = () => import('@/views/my/userInfo/EditInfo')
+const my = [
   {
     path: '/my',
     name: 'My',
-    components: {
-      default: My,
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () =>
+    //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
+    component:{
+      My
     }
   },
 
   {
     path: '/userDetails',
     name: 'UserDetails',
-    components: {
-      default: userDetails,
+    component:{
+      userDetails
     }
+    
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
-    components: {
-      default: editInfo,
+    component:{
+      editInfo
     }
+   
+  },
+]
+
+const baseRoute = [
+  {
+    path: '/',
+    redirect: '/login',
   },
 ]
 
 const router = new VueRouter({
-  routes,
+  routes: [...baseRoute, ...login, ...my],
   mode: 'history',
-
-
 })
 
 // 全局前置守卫

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import leftNavBer from "@/components/common/navber/NavBer";
+import leftNavBer from "components/common/navber/BaseNavBer";
 import VanIcon from "vant/lib/icon";
 // import ForgetVue from "../Forget.vue";
 

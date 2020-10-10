@@ -8,11 +8,8 @@
 
 
 <script>
-import vanField from "vant/lib/field";
-import "vant/lib/field/style";
+import {Field as vanField,Icon as vanIcon} from "vant";
 
-import vanIcon from "vant/lib/icon";
-import "vant/lib/icon/style";
 
 export default {
   name: "Mainfield",

@@ -5,7 +5,7 @@
         <section class="user-center-info-show clearfix">
           <div class="avatar">
             <div>
-              <img src="@/assets/images/bg.png" alt />
+              <!-- <img src="@/assets/images/bg.png" alt /> -->
             </div>
           </div>
           <div class="base-info">
@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import vanIcon from "vant/lib/icon";
-import "vant/lib/icon/style";
+import {icon as vanIcon} from "vant";
+
 export default {
   name: "MyHome",
   data() {
@@ -157,7 +157,7 @@ export default {
     .avatar {
       display: block;
       float: left;
-
+      overflow: hidden;
       div {
         width: 58px;
         height: 58px;

@@ -7,9 +7,8 @@
 </template>
 
 <script>
-import vanForm from "vant/lib/form";
-import "vant/lib/form/style";
 
+import {Form as vanForm} from "vant";
 
 export default {
   name: "MainFrom",

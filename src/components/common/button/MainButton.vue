@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import vanButton from "vant/lib/button";
-import "vant/lib/button/style";
+import {Button as vanButton} from "vant";
+
 
 export default {
   name: "Mainbutton",

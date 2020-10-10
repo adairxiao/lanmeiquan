@@ -38,10 +38,10 @@ export default {
       Popup,
       {
         props: {
-          show: { isShow: true },
+          show: { isShow: false },
         },
       },
-      [h("h1", {}, "askfjas")]
+      // [h("h1", {}, "askfjas")]
     );
   },
 

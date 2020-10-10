@@ -1,11 +1,9 @@
 import axios from 'axios'
 import base from './hostBase'
-import store from './../store/index'
+import store from '@/store/index'
 
-import Toast from 'vant/lib/toast';
-import 'vant/lib/toast/style'
-import Dialog from 'vant/lib/dialog';
-import 'vant/lib/dialog/style'
+import {Toast,Dialog} from 'vant';
+
 
 
 

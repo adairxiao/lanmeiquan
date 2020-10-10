@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import leftNavBer from "@/components/common/navber/NavBer";
+import leftNavBer from "components/common/navber/NavBer";
 import VanIcon from "vant/lib/icon";
 
 export default {

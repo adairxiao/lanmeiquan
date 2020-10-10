@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import vanPopup from "vant/lib/popup";
-import "vant/lib/popup/style";
+import {popup as vanPopup} from "vant";
+
 export default {
   name: "Popup",
   data() {

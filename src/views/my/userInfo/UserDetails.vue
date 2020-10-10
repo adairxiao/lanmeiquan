@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-details-container">
     <article>
       <section v-if="isEdit">
         <div class="user-details">
@@ -44,7 +44,7 @@
               v-for="(value, name) in retUserBase"
               :key="name"
             >
-              <van-cell is-link @click="cellEvent(name)">
+              <van-cell  is-link @click="cellEvent(name)">
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
                   <span class="custom-value">{{ value }}</span>
@@ -61,6 +61,8 @@
                 is-link
                 :value="setCertification"
               />
+
+            
             </div>
             <div class="set-wechat-price margin-top">
               <van-cell
@@ -79,19 +81,10 @@
 </template>
 
 <script>
-import vanImage from "vant/lib/image";
-import "vant/lib/image/style";
-
-import vanLoading from "vant/lib/loading";
-import "vant/lib/loading";
-
-import vanCell from "vant/lib/cell";
-import "vant/lib/cell";
-
+import {cell as vanCell ,image as vanImage,loading as vanLoading} from "vant";
 import buttomPopup from "./UserDetailsPopup";
-
-
 import { EventBus } from "../../../router/eventBus"
+
 export default {
   name: "UserDetails",
   data() {
@@ -108,7 +101,7 @@ export default {
         city: "杭州",
         signature: "我就是我，不一样的烟火哈哈哈...",
       },
-      setCertification: "", //已设置
+      setCertification: '已设置', //已设置
     };
   },
   computed: {
@@ -143,6 +136,7 @@ export default {
   margin-top: 15px;
 }
 
+// 下划线
 .border-bottom {
   &::after {
     display: block;
@@ -151,7 +145,9 @@ export default {
     border-bottom: 1px solid #cccccc;
   }
 }
-
+.user-details-container{
+  width: 100%;
+}
 .user-details {
   position: relative;
   width: 100%;
@@ -195,6 +191,7 @@ export default {
 }
 
 .edit-user-details {
+  width: 100%;
   .custom-title {
     font-size: 16px;
     font-family: PingFang SC;

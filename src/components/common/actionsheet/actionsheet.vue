@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import vanActionSheet from "vant/lib/action-sheet" 
-import "vant/lib/action-sheet/style"
+import {ActionSheet as vanActionSheet} from "vant" 
+
 export default {
   name:"ActionSheet",
   data(){

@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import NavBar from "vant/lib/nav-bar";
-import "vant/lib/nav-bar/style";
+import {NavBar} from "vant";
+
 
 export default {
   name: "BaseNavbar",

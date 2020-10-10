@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import vanField from "vant/lib/field";
-import "vant/lib/field/style";
+import {field as vanField} from "vant";
+
 export default {
   data() {
     return {
