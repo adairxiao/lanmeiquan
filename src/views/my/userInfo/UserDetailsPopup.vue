@@ -1,48 +1,45 @@
-<!-- <template>
-  <div>
-    <div v-if="showClass">
-      <action-sheet v-bind="ActionSheetProps"></action-sheet>
-    </div>
-    <div v-else>
-      <popup v-bind="ActionSheetProps">
-        <template #default>
-          <!-- <div>neir</div> 
-        </template>
-      </popup>
-    </div>
-  </div>
-</template>-->
-
 <script>
-const ActionSheet = () => import("@/components/common/actionsheet/actionsheet");
+import ActionSheet from "@/components/common/actionsheet/actionsheet"
 
-import Popup from "../../../components/common/popup/Popup";
-import { EventBus } from "../../../router/eventBus";
+import Popup from "../../../components/common/popup/Popup"
+import { EventBus } from "../../../router/eventBus"
 export default {
   name: "UserDetailsPopup",
 
-  data() {
+  data () {
     return {
-      ActionSheetProps: { show: { isShow: false } },
-      showCurrentClass: "",
-    };
+      show: false,
+      showCurrentTitle: "",
+    }
   },
-  computed: {
-    showClass() {
-      return ["性别"].includes(this.showCurrentClass);
-    },
-  },
-  render(h) {
+  render (h) {
     // 根据传入的title判断启用ActionSheet或者popup组件
-    return h(
-      Popup,
-      {
+    if (this.showCurrentTitle === "性别") {
+      return h(ActionSheet, {
         props: {
-          show: { isShow: false },
+          isShow: this.show,
+          title: this.showCurrentTitle,
         },
-      },
-      // [h("h1", {}, "askfjas")]
-    );
+        scopedSlots: {
+          default: props => h('span',)
+        },
+      })
+
+    } else {
+
+
+      return h(
+        Popup,
+        {
+          props: {
+            show: this.show,
+          },
+        },
+        [h("h1", {}, "askfjas")]
+      )
+    }
+
+
   },
 
   // components: {
@@ -50,20 +47,24 @@ export default {
   //   Popup,
   // },
 
-  mounted() {
+  mounted () {
     // 使用bus接受父组件中兄弟组件传的值
-    // let self = this;
-    // EventBus.$on("showClass", function (title) {
-    //   self.showCurrentClass = title;
-    //   self.popupSex();
-    // });
+    let self = this
+    EventBus.$on("showClass", function (title) {
+      self.showCurrentTitle = title
+      self.popupSex()
+    })
+
   },
-  // methods: {
-  //   popupSex() {
-  //     this.ActionSheetProps.show.isShow = true;
-  //     // this.$set(this.ActionSheetProps,"")
-  //   },
-  // },
+  updated: function () {
+    console.log("update");
+  },
+  methods: {
+    popupSex () {
+      this.show = true
+      // this.$set(this.ActionSheetProps,"")
+    },
+  },
 };
 </script>
 

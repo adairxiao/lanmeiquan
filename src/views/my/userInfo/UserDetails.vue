@@ -44,7 +44,7 @@
               v-for="(value, name) in retUserBase"
               :key="name"
             >
-              <van-cell  is-link @click="cellEvent(name)">
+              <van-cell is-link @click="cellEvent(name)">
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
                   <span class="custom-value">{{ value }}</span>
@@ -61,8 +61,6 @@
                 is-link
                 :value="setCertification"
               />
-
-            
             </div>
             <div class="set-wechat-price margin-top">
               <van-cell
@@ -76,50 +74,49 @@
       </section>
     </article>
 
-    <buttom-popup/>
+    <buttom-popup />
   </div>
 </template>
 
 <script>
-import {cell as vanCell ,image as vanImage,loading as vanLoading} from "vant";
-import buttomPopup from "./UserDetailsPopup";
+import { cell as vanCell, image as vanImage, loading as vanLoading } from "vant"
+import buttomPopup from "./UserDetailsPopup"
 import { EventBus } from "../../../router/eventBus"
 
 export default {
   name: "UserDetails",
-  data() {
+  data () {
     return {
       isEdit: false,
       user_id: 101566,
       bg_image: "https://img.yzcdn.cn/vant/cat.jpeg",
-      userBase: {
-        name: "adair",
-        sex: "男",
-        birthday: "1994-03-28 白羊座",
-        height: "169",
-        weight: "48",
-        city: "杭州",
-        signature: "我就是我，不一样的烟火哈哈哈...",
-      },
+      userBase: [
+        { '昵称': 'adair' },
+        { '性别': '男' },
+        { '生日': '1994-03-28 白羊座' },
+        { '身高': '169' },
+        { '体重': '48' },
+        { '城市': '杭州' },
+        { '个性签名': '我就是我，不一样的烟火哈哈哈...' },
+      ],
       setCertification: '已设置', //已设置
-    };
+    }
   },
   computed: {
-    retUserBase() {
-      return {
-        昵称: this.userBase.name,
-        性别: this.userBase.sex,
-        生日: this.userBase.birthday,
-        身高: this.userBase.height,
-        体重: this.userBase.weight,
-        城市: this.userBase.city,
-        个性签名: this.userBase.signature,
-      };
-    },
+    retUserBase () {
+      let user = {}
+      for (const value in this.userBase) {
+        Object.assign(user, this.userBase[value])
+      }
+      return user
+    }
   },
   methods: {
-    cellEvent(title) {
-      EventBus.$emit("showClass",title)
+    cellEvent (title) {
+      if (title !== "昵称" && title !== "个性签名") {
+        EventBus.$emit("showClass", title)
+      }
+
     },
   },
   components: {
@@ -145,7 +142,7 @@ export default {
     border-bottom: 1px solid #cccccc;
   }
 }
-.user-details-container{
+.user-details-container {
   width: 100%;
 }
 .user-details {

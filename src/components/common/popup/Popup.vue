@@ -1,5 +1,5 @@
 <template>
-  <van-Popup v-model="show.isShow" position="bottom" >
+  <van-Popup v-model="show" position="bottom" >
     <div>
       <slot></slot>
     </div>
@@ -16,8 +16,8 @@ export default {
   },
   props: {
     show: {
-      type: Object,
-      default: { isShow: false },
+      type: Boolean,
+      default:  false ,
     },
   },
   components: {

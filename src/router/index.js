@@ -72,18 +72,16 @@ const my = [
   {
     path: '/userDetails',
     name: 'UserDetails',
-    component:{
-      userDetails
-    }
+    component:userDetails,
+    
     
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
-    component:{
-      editInfo
-    }
+    component:editInfo,
+    
    
   },
 ]

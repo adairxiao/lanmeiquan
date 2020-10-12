@@ -1,6 +1,8 @@
 <template>
-<van-action-sheet v-model="show.isShow" >
-  
+<van-action-sheet v-model="show" :title="title">
+  <div>
+    <slot></slot>
+  </div>
 </van-action-sheet>
   
 </template>
@@ -11,14 +13,23 @@ import {ActionSheet as vanActionSheet} from "vant"
 export default {
   name:"ActionSheet",
   data(){
-    return {}
+    return {show:this.isShow}
   },
   props:{
-    show:{
-      type:Object,
-      default:{isShow:false}
+    isShow:{
+      type:Boolean,
+      default:false
     },
-    
+    title:{
+      type:String,
+      default:""
+    }
+
+  },
+  computed:{
+
+  },
+  mounted(){
 
   },
   components:{
