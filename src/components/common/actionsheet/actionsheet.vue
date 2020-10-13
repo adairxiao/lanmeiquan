@@ -1,38 +1,51 @@
 <template>
-<van-action-sheet v-model="show" :title="title">
   <div>
-    <slot></slot>
+    <van-action-sheet v-model="show" :title="title" @close="close">
+      <div>
+        <slot></slot>
+      </div>
+    </van-action-sheet>
   </div>
-</van-action-sheet>
-  
 </template>
 
 <script>
-import {ActionSheet as vanActionSheet} from "vant" 
+import { ActionSheet as vanActionSheet } from "vant"
 
 export default {
-  name:"ActionSheet",
-  data(){
-    return {show:this.isShow}
+  name: "ActionSheet",
+  data () {
+    return { show: this.value }
   },
-  props:{
-    isShow:{
-      type:Boolean,
-      default:false
+  props: {
+    value: {
+      type: Boolean,
+      default: false
     },
-    title:{
-      type:String,
-      default:""
+    title: {
+      type: String,
+      default: ""
     }
 
   },
-  computed:{
-
+  watch:{
+    value(val){
+      this.show = val
+    },
   },
-  mounted(){
-
+  mounted () {
+    // 使用bus接受父组件中兄弟组件传的值
+    // let self = this
+    // EventBus.$on("showClass", function (title) {
+      
+    // })
   },
-  components:{
+  methods:{
+    close(){
+      // 关闭popup时，发送给父组件
+      this.$emit('input', this.show)
+    }
+  },
+  components: {
     vanActionSheet
   }
 
@@ -40,5 +53,4 @@ export default {
 </script>
 
 <style>
-
 </style>

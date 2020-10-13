@@ -74,13 +74,14 @@
       </section>
     </article>
 
-    <buttom-popup />
+    <buttom-popup v-model="PopupProps.open" :title="PopupProps.title" />
   </div>
 </template>
 
 <script>
 import { cell as vanCell, image as vanImage, loading as vanLoading } from "vant"
-import buttomPopup from "./UserDetailsPopup"
+// import buttomPopup from "./UserDetailsPopup"
+import buttomPopup from "@/components/common/popup/Popup"
 import { EventBus } from "../../../router/eventBus"
 
 export default {
@@ -100,6 +101,7 @@ export default {
         { '个性签名': '我就是我，不一样的烟火哈哈哈...' },
       ],
       setCertification: '已设置', //已设置
+      PopupProps: { open: false, title: "" },
     }
   },
   computed: {
@@ -113,9 +115,12 @@ export default {
   },
   methods: {
     cellEvent (title) {
+      // 弹出popup
       if (title !== "昵称" && title !== "个性签名") {
-        EventBus.$emit("showClass", title)
+        this.PopupProps.open = true
+        this.PopupProps.title = title
       }
+
 
     },
   },

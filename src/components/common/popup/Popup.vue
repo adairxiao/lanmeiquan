@@ -1,24 +1,45 @@
 <template>
-  <van-Popup v-model="show" position="bottom" >
-    <div>
+  <van-Popup v-model="show" :title="title" @close="close" position="bottom">
       <slot></slot>
-    </div>
   </van-Popup>
 </template>
 
 <script>
-import {popup as vanPopup} from "vant";
+import { popup as vanPopup } from "vant"
 
 export default {
   name: "Popup",
-  data() {
-    return {};
+  data () {
+    return { show: this.value }
   },
   props: {
-    show: {
+    value: {
       type: Boolean,
-      default:  false ,
+      default: false
     },
+    title: {
+      type: String,
+      default: ""
+    }
+
+  },
+  watch: {
+    value (val) {
+      this.show = val
+    },
+  },
+  mounted () {
+    // 使用bus接受父组件中兄弟组件传的值
+    // let self = this
+    // EventBus.$on("showClass", function (title) {
+
+    // })
+  },
+  methods: {
+    close () {
+      // 关闭popup时，发送给父组件
+      this.$emit('input', this.show)
+    }
   },
   components: {
     vanPopup,
