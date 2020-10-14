@@ -1,6 +1,6 @@
 <template>
   <van-Popup v-model="show" :title="title" @close="close" position="bottom">
-      <slot></slot>
+    <div id="popupContainer"></div>
   </van-Popup>
 </template>
 
@@ -28,12 +28,14 @@ export default {
       this.show = val
     },
   },
+  created(){
+    console.log("创建");
+    
+  },
   mounted () {
-    // 使用bus接受父组件中兄弟组件传的值
-    // let self = this
-    // EventBus.$on("showClass", function (title) {
+    
+    console.log(this.component)
 
-    // })
   },
   methods: {
     close () {
@@ -45,6 +47,10 @@ export default {
     vanPopup,
   },
 };
+
+
+
+
 </script>
 
 <style>

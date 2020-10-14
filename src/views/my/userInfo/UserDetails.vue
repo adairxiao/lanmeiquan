@@ -52,22 +52,12 @@
               </van-cell>
             </div>
 
-            <div class="certification-info margin-top">
-              <van-cell title="认证信息" is-link :value="setCertification" />
-            </div>
-            <div class="set-menber-price margin-top">
-              <van-cell
-                title="设置会员订阅"
-                is-link
-                :value="setCertification"
-              />
-            </div>
-            <div class="set-wechat-price margin-top">
-              <van-cell
-                title="设置微信号打赏"
-                is-link
-                :value="setCertification"
-              />
+            <div
+              class="set-item margin-top"
+              v-for="(value, key) in setItem"
+              :key="key"
+            >
+              <van-cell :title="key" is-link :value="value" />
             </div>
           </div>
         </div>
@@ -100,7 +90,11 @@ export default {
         { '城市': '杭州' },
         { '个性签名': '我就是我，不一样的烟火哈哈哈...' },
       ],
-      setCertification: '已设置', //已设置
+      setItem: {
+        '认证信息': "已设置",
+        "设置会员订阅": "",
+        "设置微信号打赏": ""
+      },
       PopupProps: { open: false, title: "" },
     }
   },

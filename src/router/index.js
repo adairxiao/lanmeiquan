@@ -55,6 +55,7 @@ const login = [
 const My = () => import('@/views/my/MyHome')
 const userDetails = () => import('@/views/my/userInfo/UserDetails')
 const editInfo = () => import('@/views/my/userInfo/EditInfo')
+
 const my = [
   {
     path: '/my',
@@ -84,6 +85,7 @@ const my = [
     
    
   },
+  
 ]
 
 const baseRoute = [
