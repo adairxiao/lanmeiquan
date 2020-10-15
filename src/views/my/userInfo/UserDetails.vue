@@ -24,102 +24,128 @@
             <span class="user-id">ID:{{ user_id }}</span>
           </div>
         </div>
+      </section>
 
-        <div class="user-name margin-top">
+      <section>
+        <div class="user-name margin-top" v-if="isEdit">
           <van-cell is-link>
             <!-- 使用 title 插槽来自定义标题 -->
             <template #title>
               <span class="custom-title">昵称</span>
-              <span class="custom-value">{{ name }}</span>
+              <span class="custom-value">{{ userInfo.name }}</span>
             </template>
           </van-cell>
         </div>
-      </section>
-
-      <section v-else>
-        <div class="edit-user-details">
+        <div class="edit-user-details" v-else>
           <div class="user-base-details margin-top">
             <div
-              class="border-bottom"
-              v-for="(value, name) in retUserBase"
+              v-for="(value, name) in userInfoBase"
+              :class="{
+                'border-bottom': isSetItem(name, 'ture'),
+                'set-item ': isSetItem(name),
+                'margin-top': isSetItem(name),
+              }"
               :key="name"
             >
-              <van-cell  is-link @click="cellEvent(name)">
+              <van-cell
+                is-link
+                @click="cellEvent(name)"
+                v-if="isSetItem(name, 'ture')"
+              >
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
                   <span class="custom-value">{{ value }}</span>
                 </template>
               </van-cell>
-            </div>
-
-            <div class="certification-info margin-top">
-              <van-cell title="认证信息" is-link :value="setCertification" />
-            </div>
-            <div class="set-menber-price margin-top">
-              <van-cell
-                title="设置会员订阅"
-                is-link
-                :value="setCertification"
-              />
-
-            
-            </div>
-            <div class="set-wechat-price margin-top">
-              <van-cell
-                title="设置微信号打赏"
-                is-link
-                :value="setCertification"
-              />
+              <van-cell :title="name" is-link :value="value" v-else />
             </div>
           </div>
         </div>
       </section>
     </article>
 
-    <buttom-popup/>
+    <buttom-popup v-model="PopupProps.open" :title="PopupProps.title">
+      <template>
+        <component v-bind:is="currentPopupComponent"></component>
+      </template>
+    </buttom-popup>
   </div>
 </template>
 
 <script>
-import {cell as vanCell ,image as vanImage,loading as vanLoading} from "vant";
-import buttomPopup from "./UserDetailsPopup";
+import { cell as vanCell, image as vanImage, loading as vanLoading } from "vant"
+// import buttomPopup from "./UserDetailsPopup"
+import buttomPopup from "@/components/common/popup/Popup"
+import picker from "@/components/common/picker/Picker.vue"
 import { EventBus } from "../../../router/eventBus"
 
 export default {
   name: "UserDetails",
-  data() {
+  data () {
     return {
       isEdit: false,
-      user_id: 101566,
       bg_image: "https://img.yzcdn.cn/vant/cat.jpeg",
-      userBase: {
-        name: "adair",
-        sex: "男",
-        birthday: "1994-03-28 白羊座",
-        height: "169",
-        weight: "48",
-        city: "杭州",
-        signature: "我就是我，不一样的烟火哈哈哈...",
+      userInfo: {
+        user_id: '101566',
+        name: 'adair',
+        sex: '男',
+        birthday: '1994-03-28 白羊座',
+        height: '169',
+        weight: '48',
+        city: '杭州',
+        Signature: '我就是我，不一样的烟火哈哈哈...',
+        certification_information: "已设置",
+        set_subscription: "",
+        set_WeChat: ""
       },
-      setCertification: '已设置', //已设置
-    };
+      PopupProps: { open: false, title: "" },
+      currentPopupContentComponent: "",
+      PopupContentComponent: ["picker",]
+    }
   },
   computed: {
-    retUserBase() {
-      return {
-        昵称: this.userBase.name,
-        性别: this.userBase.sex,
-        生日: this.userBase.birthday,
-        身高: this.userBase.height,
-        体重: this.userBase.weight,
-        城市: this.userBase.city,
-        个性签名: this.userBase.signature,
-      };
-    },
+    userInfoBase () {
+      let i = {
+        name: '昵称',
+        sex: '性别',
+        birthday: '生日',
+        height: '身高',
+        weight: '体重',
+        city: '城市',
+        Signature: '个性签名',
+        certification_information: '认证信息',
+        set_subscription: '设置会员订阅',
+        set_WeChat: '设置微信号打赏'
+      }
+      let item = {}
+      for (const [key, value] of Object.entries(this.userInfo)) {
+        let newKey = i[key] || key
+        console.log(newKey, value)
+        if (newKey !== "user_id") item[newKey] = value
+      }
+      return item
+    }
   },
   methods: {
-    cellEvent(title) {
-      EventBus.$emit("showClass",title)
+    isSetItem (name, Negate = false) {
+      // 根据是否是设置项添加class，或者渲染不同的项
+      let result = name === '认证信息' || name === '设置会员订阅' || name === '设置微信号打赏' ? true : false
+      console.log(result)
+      if (Negate) {
+        return !result
+      } else {
+        return result
+      }
+    },
+    cellEvent (title) {
+      // 弹出popup
+      if (title !== "昵称" && title !== "个性签名") {
+        this.PopupProps.open = true
+        this.PopupProps.title = title
+
+      }
+
+
     },
   },
   components: {
@@ -127,6 +153,7 @@ export default {
     vanLoading,
     vanCell,
     buttomPopup,
+    picker
   },
 };
 </script>
@@ -145,7 +172,7 @@ export default {
     border-bottom: 1px solid #cccccc;
   }
 }
-.user-details-container{
+.user-details-container {
   width: 100%;
 }
 .user-details {
