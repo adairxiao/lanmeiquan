@@ -1,6 +1,8 @@
 <template>
-  <van-Popup v-model="show" :title="title" @close="close" position="bottom">
-    <div id="popupContainer"></div>
+  <van-Popup v-model="show" :title="title" @close="close" :position="position">
+    <div>
+      <slot></slot>
+    </div>
   </van-Popup>
 </template>
 
@@ -20,22 +22,16 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    position: {
+      type: String,
+      default: "bottom"
     }
-
   },
   watch: {
     value (val) {
       this.show = val
     },
-  },
-  created(){
-    console.log("创建");
-    
-  },
-  mounted () {
-    
-    console.log(this.component)
-
   },
   methods: {
     close () {
