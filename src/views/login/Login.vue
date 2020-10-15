@@ -1,8 +1,8 @@
 <template>
   <div class="login-article">
-    <!-- <login :loginMethod="loginMethod" :btnText="btnText" />-->
-    <!-- <router-link to="/"></router-link>-->
+    
     <div class="login-tab-ber"><router-view /></div>
+
     <div class="login-content">
       <div class="login-content-top">
         <div>
@@ -85,7 +85,10 @@ export default {
     vanField, 
     pwdField,
   },
-  mounted() {},
+  mounted() {
+
+    
+  },
   methods: {
     // 接受pwdfield的值
     recVal(val) {
@@ -112,7 +115,7 @@ export default {
         // 1.验证内容
         validator
           .add([this.phone, "isNonEmpty", "手机号码不能为空!"])
-          .add([this.phone, "maxLength", 11, "手机号码位数不正确!"])
+          .add([this.phone, "maxLength", 11, "手机号码位数不正确!"]).start(this)
           
         // validator
         //   .add([this.pwd, "isNonEmpty", "密码不能为空!"])
@@ -120,7 +123,7 @@ export default {
         //   .start(this);
 
         // 2.提交数据
-        this.$router.push("/sendcode");
+        // this.$router.push("/sendcode");
       } else {
         //提交phone and password
         // validator.add([ this.phone, ,"isNonEmpty","手机号码不能为空!"].start().toast(this)

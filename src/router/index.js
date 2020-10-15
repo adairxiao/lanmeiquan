@@ -12,7 +12,7 @@ const login = [
   {
     path: '/login',
     name: 'Login',
-    meta:{title:''},
+    meta:{ title:''},
     component: Login,
     children: [
       {
@@ -26,26 +26,22 @@ const login = [
     path: '/sendCode',
     name: 'sendCode',
     meta: { title: '' },
-    components: {
-      default: sendCode,
-    },
+    component: sendCode,
   },
   {
     path: '/foundUser',
     name: 'foundUser',
     meta: { title: '' },
-    components: {
-      default: foundUser,
-    },
+    component: foundUser,
   },
   {
     path: '/forget',
     name: 'Forget',
     meta: { title: '忘记密码' },
-    component:  Forget,
-    children:[
+    component: Forget,
+    children: [
       {
-        path:'',
+        path: '',
 
       }
     ]
@@ -64,7 +60,7 @@ const my = [
     // which is lazy-loaded when the route is visited.
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
-    component:{
+    component: {
       My
     }
   },
@@ -72,19 +68,14 @@ const my = [
   {
     path: '/userDetails',
     name: 'UserDetails',
-    component:{
-      userDetails
-    }
-    
+    component: userDetails,
+
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
-    component:{
-      editInfo
-    }
-   
+    component: editInfo,
   },
 ]
 
@@ -95,16 +86,24 @@ const baseRoute = [
   },
 ]
 
+const routes = [...baseRoute, ...login, ...my]
 const router = new VueRouter({
-  routes: [...baseRoute, ...login, ...my],
+  routes,
   mode: 'history',
 })
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
-  // ...
-  // console.log(to);
+  // 输入路由不正确重定向到login页面（已实现）
+  // 未登录跳转login（未实现）
+  // 以登录跳转找不到页面或者当前页（未实现）
+  const rs = routes.map(e => {
+    return e.name
+  })
+  if (!rs.includes(to.name)) next({ name: 'Login' })
+  else next() 
 
-  next()
+
+
 })
 export default router

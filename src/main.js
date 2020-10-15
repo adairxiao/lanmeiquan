@@ -3,8 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import Toast from 'vant/lib/toast';
-import 'vant/lib/toast/style'
+import {Toast} from 'vant';
+
 
 Vue.use(Toast);
 

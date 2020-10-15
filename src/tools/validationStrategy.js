@@ -15,14 +15,15 @@ strategies.prototype.isNonEmpty = function (value) {
 
 strategies.prototype.minLength = function (value) {
   console.log(value);
-  if (value[0].length > value[2]) {
+  if (value[0].length < value[2]) {
     return false
   }
   return true
 }
 
 strategies.prototype.maxLength = function (value) {
-  if (value[0].length < value[2]) {
+  console.log(value[0].length);
+  if (value[0].length > value[2]) {
     return false
   }
   return true
@@ -34,18 +35,21 @@ export var validator = {
   cache: [], // 保存效验规则
   isRun: false, //是否执行
   add(rule) {
-    // 执行时规则不允许压入
-    if (!this.isRun) this.cache.push(rule)
+
+
+    this.cache.push(rule)
     return this
   },
   start(self) {
+    console.log(this.cache);
+    console.log(this);
     const objectives = new strategies()
     let msg = null
-    this.isRun = true
     for (let rule of this.cache) {
-      msg = rule[rule.length-1]
-      let event =  rule[1]
+      msg = rule[rule.length - 1]
+      let event = rule[1]
       this.isRun = objectives[event](rule)
+      console.log("this.isRun", this.isRun);
       if (!this.isRun) {
         this.msg = msg
         this.toast(self)
@@ -53,6 +57,11 @@ export var validator = {
         break
       }
 
+      
+      this.isRun = false
+      this.cache = []
+      this.msg=""
+      1
     }
     return this.msg
   },
