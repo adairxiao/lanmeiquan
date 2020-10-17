@@ -46,12 +46,9 @@
                 'margin-top': isSetItem(name),
               }"
               :key="name"
+              @click="cellEvent(name, value)"
             >
-              <van-cell
-                is-link
-                @click="cellEvent(name)"
-                v-if="isSetItem(name, 'ture')"
-              >
+              <van-cell is-link v-if="isSetItem(name, 'ture')">
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
                   <span class="custom-value">{{ value }}</span>
@@ -64,9 +61,18 @@
       </section>
     </article>
 
-    <buttom-popup v-model="PopupProps.open" :title="PopupProps.title">
+    <buttom-popup v-model="PopupProps.open">
       <template>
-        <component v-bind:is="currentPopupComponent"></component>
+        <div v-if="PopupProps.title === '性别'">性别</div>
+        <div v-else>
+          <picker
+            :showToolbar="PopupProps.picker.showToolbar"
+            :columns="PopupProps.picker.columns"
+            :title="PopupProps.title"
+            @confirm="pickerConfirm"
+            @cancel="pickerCancel"
+          />
+        </div>
       </template>
     </buttom-popup>
   </div>
@@ -94,13 +100,12 @@ export default {
         weight: '48',
         city: '杭州',
         Signature: '我就是我，不一样的烟火哈哈哈...',
-        certification_information: "已设置",
+        certification_information: "模特",
         set_subscription: "",
         set_WeChat: ""
       },
-      PopupProps: { open: false, title: "" },
-      currentPopupContentComponent: "",
-      PopupContentComponent: ["picker",]
+      // 给Popup组件传值
+      PopupProps: { open: false, title: "", picker: { showToolbar: false, columns: [] } },
     }
   },
   computed: {
@@ -120,8 +125,16 @@ export default {
       let item = {}
       for (const [key, value] of Object.entries(this.userInfo)) {
         let newKey = i[key] || key
-        console.log(newKey, value)
-        if (newKey !== "user_id") item[newKey] = value
+
+        if (newKey !== "user_id") {
+          
+          if (newKey === "认证信息" && value !== "" || newKey === "设置会员订阅" && value !== "" || newKey === "设置微信号打赏" && value !== "") {
+            value = "已设置"
+          }
+
+          item[newKey] = value
+        }
+
       }
       return item
     }
@@ -130,23 +143,69 @@ export default {
     isSetItem (name, Negate = false) {
       // 根据是否是设置项添加class，或者渲染不同的项
       let result = name === '认证信息' || name === '设置会员订阅' || name === '设置微信号打赏' ? true : false
-      console.log(result)
+
       if (Negate) {
         return !result
       } else {
         return result
       }
     },
-    cellEvent (title) {
+    cellEvent (title, value) {
       // 弹出popup
-      if (title !== "昵称" && title !== "个性签名") {
-        this.PopupProps.open = true
-        this.PopupProps.title = title
+      console.log()
+      switch (title) {
+        case '性别':
+        case '生日':
+        case '身高':
+        case '体重':
+        case '城市':
+        case '设置会员订阅':
+          this.usePopup(title)
+          break
+        case '昵称':
+        case '认证信息':
+        case '设置微信号打赏':
+          this.toPage(title, value)
+          break
 
       }
 
-
     },
+    // 使用popup
+    usePopup (title) {
+      this.PopupProps.open = true
+      this.PopupProps.title = title
+      this.PopupProps.picker.showToolbar = true
+      this.PopupProps.picker.columns = [
+        {
+          values: ['周一', '周二', '周三', '周四', '周五'],
+          defaultIndex: 2,
+        },
+
+        {
+          values: ['上午', '下午', '晚上'],
+          defaultIndex: 1,
+        }
+      ]
+    },
+    // 跳转二级页面
+    toPage (title, value) {
+      let path = { name: "" }
+      if (title === "昵称") {
+        path.name = "EditInfo"
+        path.params = { titleVal: title, textType: "text", textval: value }
+      } else if (title === "认证信息") { }
+
+      this.$router.push(path)
+    },
+    // 处理picker发送过来的事件
+    pickerConfirm (value) {
+      console.log(value)
+    },
+    pickerCancel (value) {
+      this.PopupProps.open = value
+    }
+
   },
   components: {
     vanImage,

@@ -1,5 +1,5 @@
 <template>
-  <van-Popup v-model="show" :title="title" @close="close" :position="position">
+  <van-Popup v-model="show"  @close="close" :position="position">
     <div>
       <slot></slot>
     </div>
@@ -19,10 +19,7 @@ export default {
       type: Boolean,
       default: false
     },
-    title: {
-      type: String,
-      default: ""
-    },
+    
     position: {
       type: String,
       default: "bottom"
