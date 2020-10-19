@@ -21,7 +21,7 @@
                 </template>
               </van-image>
             </div>
-            <span class="user-id">ID:{{ user_id }}</span>
+            <span class="user-id">ID:{{ userInfo.user_id }}</span>
           </div>
         </div>
       </section>
@@ -66,7 +66,7 @@
 
     <buttom-popup v-model="PopupProps.open" :title="PopupProps.title">
       <template>
-        <component v-bind:is="currentPopupComponent"></component>
+        <component v-bind:is="currentPopupContentComponent"></component>
       </template>
     </buttom-popup>
   </div>
@@ -83,7 +83,7 @@ export default {
   name: "UserDetails",
   data () {
     return {
-      isEdit: false,
+      isEdit: true,
       bg_image: "https://img.yzcdn.cn/vant/cat.jpeg",
       userInfo: {
         user_id: '101566',
@@ -99,7 +99,7 @@ export default {
         set_WeChat: ""
       },
       PopupProps: { open: false, title: "" },
-      currentPopupContentComponent: "",
+      currentPopupContentComponent: "picker",
       PopupContentComponent: ["picker",]
     }
   },
@@ -118,9 +118,9 @@ export default {
         set_WeChat: '设置微信号打赏'
       }
       let item = {}
+      // 替换object中的key
       for (const [key, value] of Object.entries(this.userInfo)) {
         let newKey = i[key] || key
-        console.log(newKey, value)
         if (newKey !== "user_id") item[newKey] = value
       }
       return item
@@ -130,7 +130,7 @@ export default {
     isSetItem (name, Negate = false) {
       // 根据是否是设置项添加class，或者渲染不同的项
       let result = name === '认证信息' || name === '设置会员订阅' || name === '设置微信号打赏' ? true : false
-      console.log(result)
+      
       if (Negate) {
         return !result
       } else {
@@ -217,7 +217,7 @@ export default {
   }
 }
 
-.edit-user-details {
+.edit-user-details ,.user-name{
   width: 100%;
   .custom-title {
     font-size: 16px;
