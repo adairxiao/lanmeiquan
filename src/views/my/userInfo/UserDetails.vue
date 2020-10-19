@@ -46,27 +46,39 @@
                 'margin-top': isSetItem(name),
               }"
               :key="name"
+              @click="cellEvent(name, value)"
             >
-              <van-cell
-                is-link
-                @click="cellEvent(name)"
-                v-if="isSetItem(name, 'ture')"
-              >
+              <van-cell is-link v-if="isSetItem(name, 'ture')">
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
-                  <span class="custom-value">{{ value }}</span>
+                  <span class="custom-value">{{
+                    value | gt_ellipsis(name)
+                  }}</span>
                 </template>
               </van-cell>
-              <van-cell :title="name" is-link :value="value" v-else />
+              <van-cell :title="name" is-link :value="value | isSetUp" v-else />
             </div>
           </div>
         </div>
       </section>
     </article>
 
-    <buttom-popup v-model="PopupProps.open" :title="PopupProps.title">
+    <buttom-popup v-model="PopupProps.open">
       <template>
+<<<<<<< HEAD
         <component v-bind:is="currentPopupContentComponent"></component>
+=======
+        <div v-if="PopupProps.title === '性别'">性别</div>
+        <div v-else>
+          <picker
+            :showToolbar="PopupProps.picker.showToolbar"
+            :columns="PopupProps.picker.columns"
+            :title="PopupProps.title"
+            @confirm="pickerConfirm"
+            @cancel="pickerCancel"
+          />
+        </div>
+>>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       </template>
     </buttom-popup>
   </div>
@@ -86,21 +98,26 @@ export default {
       isEdit: true,
       bg_image: "https://img.yzcdn.cn/vant/cat.jpeg",
       userInfo: {
-        user_id: '101566',
-        name: 'adair',
-        sex: '男',
-        birthday: '1994-03-28 白羊座',
-        height: '169',
-        weight: '48',
-        city: '杭州',
-        Signature: '我就是我，不一样的烟火哈哈哈...',
-        certification_information: "已设置",
-        set_subscription: "",
-        set_WeChat: ""
+        user_id: this.$store.state.user_id,
+        name: this.$store.state.name,
+        sex: '',
+        birthday: '',
+        height: '',
+        weight: '',
+        city: '',
+        Signature: '',
+        certification_information: '',
+        set_subscription: '',
+        set_WeChat: ''
       },
+<<<<<<< HEAD
       PopupProps: { open: false, title: "" },
       currentPopupContentComponent: "picker",
       PopupContentComponent: ["picker",]
+=======
+      // 给Popup组件传值
+      PopupProps: { open: false, title: "", picker: { showToolbar: false, columns: [] } },
+>>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
     }
   },
   computed: {
@@ -121,32 +138,112 @@ export default {
       // 替换object中的key
       for (const [key, value] of Object.entries(this.userInfo)) {
         let newKey = i[key] || key
+<<<<<<< HEAD
         if (newKey !== "user_id") item[newKey] = value
+=======
+
+        if (newKey !== "user_id") {
+          item[newKey] = value
+        }
+
+>>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       }
       return item
     }
+  },
+  filters: {
+
+
+    // 为空时显示已设置
+    isSetUp (value) {
+      value = value !== "" ? "已设置" : value
+
+      return value
+    },
+    // 超出5个字符省略号显示
+    gt_ellipsis (value, label) {
+      let val = value
+      if (label === "个性签名") {
+        if (value.length > 5) val = value.substring(0, 5) + "..."
+      }
+      return val
+
+    }
+  },
+  created () {
+    this.$store.dispatch('upDateAsync')
   },
   methods: {
     isSetItem (name, Negate = false) {
       // 根据是否是设置项添加class，或者渲染不同的项
       let result = name === '认证信息' || name === '设置会员订阅' || name === '设置微信号打赏' ? true : false
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       if (Negate) {
         return !result
       } else {
         return result
       }
     },
-    cellEvent (title) {
+    cellEvent (title, value) {
       // 弹出popup
-      if (title !== "昵称" && title !== "个性签名") {
-        this.PopupProps.open = true
-        this.PopupProps.title = title
+      console.log()
+      switch (title) {
+        case '性别':
+        case '生日':
+        case '身高':
+        case '体重':
+        case '城市':
+        case '设置会员订阅':
+          this.usePopup(title)
+          break
+        case '昵称':
+        case '认证信息':
+        case '设置微信号打赏':
+          this.toPage(title, value)
+          break
 
       }
 
-
     },
+    // 使用popup
+    usePopup (title) {
+      this.PopupProps.open = true
+      this.PopupProps.title = title
+      this.PopupProps.picker.showToolbar = true
+      this.PopupProps.picker.columns = [
+        {
+          values: ['周一', '周二', '周三', '周四', '周五'],
+          defaultIndex: 2,
+        },
+
+        {
+          values: ['上午', '下午', '晚上'],
+          defaultIndex: 1,
+        }
+      ]
+    },
+    // 跳转二级页面
+    toPage (title, value) {
+      let path = { name: "" }
+      if (title === "昵称") {
+        path.name = "EditInfo"
+        path.params = { titleVal: title, textType: "text", textval: value }
+      } else if (title === "认证信息") { }
+
+      this.$router.push(path)
+    },
+    // 处理picker发送过来的事件
+    pickerConfirm (value) {
+      console.log(value)
+    },
+    pickerCancel (value) {
+      this.PopupProps.open = value
+    }
+
   },
   components: {
     vanImage,
