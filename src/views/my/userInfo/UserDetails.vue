@@ -51,10 +51,12 @@
               <van-cell is-link v-if="isSetItem(name, 'ture')">
                 <template #title>
                   <span class="custom-title">{{ name }}</span>
-                  <span class="custom-value">{{ value }}</span>
+                  <span class="custom-value">{{
+                    value | gt_ellipsis(name)
+                  }}</span>
                 </template>
               </van-cell>
-              <van-cell :title="name" is-link :value="value" v-else />
+              <van-cell :title="name" is-link :value="value | isSetUp" v-else />
             </div>
           </div>
         </div>
@@ -92,17 +94,17 @@ export default {
       isEdit: false,
       bg_image: "https://img.yzcdn.cn/vant/cat.jpeg",
       userInfo: {
-        user_id: '101566',
-        name: 'adair',
-        sex: '男',
-        birthday: '1994-03-28 白羊座',
-        height: '169',
-        weight: '48',
-        city: '杭州',
-        Signature: '我就是我，不一样的烟火哈哈哈...',
-        certification_information: "模特",
-        set_subscription: "",
-        set_WeChat: ""
+        user_id: this.$store.state.user_id,
+        name: this.$store.state.name,
+        sex: '',
+        birthday: '',
+        height: '',
+        weight: '',
+        city: '',
+        Signature: '',
+        certification_information: '',
+        set_subscription: '',
+        set_WeChat: ''
       },
       // 给Popup组件传值
       PopupProps: { open: false, title: "", picker: { showToolbar: false, columns: [] } },
@@ -127,17 +129,34 @@ export default {
         let newKey = i[key] || key
 
         if (newKey !== "user_id") {
-          
-          if (newKey === "认证信息" && value !== "" || newKey === "设置会员订阅" && value !== "" || newKey === "设置微信号打赏" && value !== "") {
-            value = "已设置"
-          }
-
           item[newKey] = value
         }
 
       }
       return item
     }
+  },
+  filters: {
+
+
+    // 为空时显示已设置
+    isSetUp (value) {
+      value = value !== "" ? "已设置" : value
+
+      return value
+    },
+    // 超出5个字符省略号显示
+    gt_ellipsis (value, label) {
+      let val = value
+      if (label === "个性签名") {
+        if (value.length > 5) val = value.substring(0, 5) + "..."
+      }
+      return val
+
+    }
+  },
+  created () {
+    this.$store.dispatch('upDateAsync')
   },
   methods: {
     isSetItem (name, Negate = false) {
