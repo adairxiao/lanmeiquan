@@ -65,9 +65,6 @@
 
     <buttom-popup v-model="PopupProps.open">
       <template>
-<<<<<<< HEAD
-        <component v-bind:is="currentPopupContentComponent"></component>
-=======
         <div v-if="PopupProps.title === '性别'">性别</div>
         <div v-else>
           <picker
@@ -78,7 +75,6 @@
             @cancel="pickerCancel"
           />
         </div>
->>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       </template>
     </buttom-popup>
   </div>
@@ -110,14 +106,8 @@ export default {
         set_subscription: '',
         set_WeChat: ''
       },
-<<<<<<< HEAD
-      PopupProps: { open: false, title: "" },
-      currentPopupContentComponent: "picker",
-      PopupContentComponent: ["picker",]
-=======
       // 给Popup组件传值
       PopupProps: { open: false, title: "", picker: { showToolbar: false, columns: [] } },
->>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
     }
   },
   computed: {
@@ -138,15 +128,7 @@ export default {
       // 替换object中的key
       for (const [key, value] of Object.entries(this.userInfo)) {
         let newKey = i[key] || key
-<<<<<<< HEAD
         if (newKey !== "user_id") item[newKey] = value
-=======
-
-        if (newKey !== "user_id") {
-          item[newKey] = value
-        }
-
->>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       }
       return item
     }
@@ -177,11 +159,6 @@ export default {
     isSetItem (name, Negate = false) {
       // 根据是否是设置项添加class，或者渲染不同的项
       let result = name === '认证信息' || name === '设置会员订阅' || name === '设置微信号打赏' ? true : false
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> bb7b5060ca6a4ad99a94e6ce89b000787f303e58
       if (Negate) {
         return !result
       } else {
