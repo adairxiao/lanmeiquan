@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="edit-tab-ber"><router-view /></div>
     <article class="edit">
       <section>
         <van-field
@@ -23,55 +24,41 @@ import { field as vanField } from "vant"
 export default {
   data () {
     return {
-      // textType:"text",
-      textType: "textarea",
-      labelText: "",
       value: "",
-      placeholder: "请输入个性标签",
-      maxlength: "23",
+      textType: "text",
+      labelText: "",
       // 显示清除按钮
       isClearable: true,
-
-      // 显示字数统计
-      isShowWordLimit: true,
       // 只对textarea有效
       height: { maxHeight: 275, minHeight: 137 }
     }
   },
+  computed: {
+
+    placeholder () {
+      return `请输入${this.labelText}`
+    },
+    // 显示字数统计
+    isShowWordLimit () {
+      return this.textType === "textarea" ? true : false
+
+    },
+    maxlength () {
+      return this.textType === "textarea" ? "23" : "7"
+    },
+
+  },
   beforeRouteEnter (to, from, next) {
 
     next(vm => {
-      console.log(to, from)
-      // 根据上一个路由初始化
-      if (to.params.textType === "text") {
-
-        vm.textType = to.params.textType
-        vm.maxlength = "7"
-        vm.labelText = to.params.titleVal
-        vm.placeholder = `请输入${to.params.titleVal}`
-
-        vm.isShowWordLimit = false
-        vm.value = to.params.textval
-      } else if (to.params.textType === "textarea") {
-        vm.textType = to.params.textType
-        vm.maxlength = "23"
-        vm.labelText = to.params.titleVal
-        vm.placeholder = `请输入${to.params.titleVal}`
-        vm.isShowWordLimit = true
-        vm.value = to.params.textval
-      }
-      
+      // if (from.name === null) vm.$router.push("UserDetails")
+      console.log(to)
+      vm.textType = to.params.textType
+      vm.labelText = to.params.labelText
+      vm.value = to.params.value
     })
   },
-  beforeRouteLeave (to, from, next) {
-    // 导航离开该组件的对应路由时调用
-    // 可以访问组件实例 `this`
-    if(to.name === "EditInfo"){
-      from.name = "EditInfo"
-    }
-   
-    next()
-  },
+
   components: {
     vanField,
   },

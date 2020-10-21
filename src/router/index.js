@@ -82,8 +82,14 @@ const my = [
     path: '/editInfo',
     name: 'EditInfo',
     component:editInfo,
-    
-   
+    children: [
+      {
+        path: '',
+        name:'',
+        component: TabBar,
+      },
+    ],
+
   },
   
 ]
