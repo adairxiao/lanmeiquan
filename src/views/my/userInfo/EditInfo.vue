@@ -22,11 +22,23 @@
 import { field as vanField } from "vant"
 
 export default {
+  props:{
+    textval:{
+      type: String,
+      default: ""
+    },
+    textType:{
+      type: String,
+      default: "text"
+    },
+    labelText:{
+      type: String,
+      default: ""
+    },
+  },
   data () {
     return {
-      value: "",
-      textType: "text",
-      labelText: "",
+      value:this.textval,
       // 显示清除按钮
       isClearable: true,
       // 只对textarea有效
@@ -34,7 +46,7 @@ export default {
     }
   },
   computed: {
-
+    
     placeholder () {
       return `请输入${this.labelText}`
     },
@@ -48,14 +60,13 @@ export default {
     },
 
   },
+  mounted(){
+  },
   beforeRouteEnter (to, from, next) {
-
+    
     next(vm => {
-      // if (from.name === null) vm.$router.push("UserDetails")
-      console.log(to)
-      vm.textType = to.params.textType
-      vm.labelText = to.params.labelText
-      vm.value = to.params.value
+      if (from.name === null) vm.$router.push("UserDetails")
+     
     })
   },
 

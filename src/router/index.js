@@ -12,7 +12,7 @@ const login = [
   {
     path: '/login',
     name: 'Login',
-    meta:{title:''},
+    meta: { title: '' },
     component: Login,
     children: [
       {
@@ -42,13 +42,12 @@ const login = [
     path: '/forget',
     name: 'Forget',
     meta: { title: '忘记密码' },
-    component:  Forget,
-    children:[
+    component: Forget,
+    children: [
       {
-        path:'',
-
-      }
-    ]
+        path: '',
+      },
+    ],
   },
 ]
 
@@ -65,33 +64,37 @@ const my = [
     // which is lazy-loaded when the route is visited.
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
-    component:{
-      My
-    }
+    component: {
+      My,
+    },
   },
 
   {
     path: '/userDetails',
     name: 'UserDetails',
-    component:userDetails,
-    
-    
+    component: userDetails,
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
-    component:editInfo,
+    component: editInfo,
+    props: (route) => ({
+      labelText: route.query.labelText,
+      textType: route.query.textType,
+      textval: route.query.textval,
+    }),
     children: [
       {
         path: '',
-        name:'',
+        meta: (route) => ({
+          title: route.query.labelText,
+          
+        }),
         component: TabBar,
       },
     ],
-
   },
-  
 ]
 
 const baseRoute = [
