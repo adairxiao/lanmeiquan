@@ -1,15 +1,17 @@
 const state = {
-  user_id: '',
-  name: '',
-  sex: '',
-  birthday: '',
-  height: '',
-  weight: '',
-  city: '',
-  Signature: '',
-  certification_information: '',
-  set_subscription: '',
-  set_WeChat: '',
+  userInfo: {
+    user_id: '',
+    name: '',
+    sex: '',
+    birthday: '',
+    height: '',
+    weight: '',
+    city: '',
+    Signature: '',
+    certification_information: '',
+    set_subscription: '',
+    set_WeChat: '',
+  },
 }
 
 const getters = {}
@@ -17,8 +19,14 @@ const getters = {}
 const mutations = {
   upDate(state, payload) {
     for (const [key, value] of Object.entries(payload)) {
-      state[`${key}`] = value
+      state.userInfo[`${key}`] = value
     }
+  },
+
+  updateItem(state, item) {
+    // item {key,value}
+    // 更新某个项
+    state.userInfo[`${item.key}`] = item.value
   },
 }
 

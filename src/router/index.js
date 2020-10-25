@@ -12,7 +12,7 @@ const login = [
   {
     path: '/login',
     name: 'Login',
-    meta:{ title:''},
+    meta: { title: '' },
     component: Login,
     children: [
       {
@@ -42,9 +42,8 @@ const login = [
     children: [
       {
         path: '',
-
-      }
-    ]
+      },
+    ],
   },
 ]
 
@@ -62,24 +61,36 @@ const my = [
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
     component: {
-      My
-    }
+      My,
+    },
   },
 
   {
     path: '/userDetails',
     name: 'UserDetails',
-    component:userDetails,
-    
-    
+    component: userDetails,
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
     component: editInfo,
+    props: (route) => ({
+      labelText: route.query.labelText,
+      textType: route.query.textType,
+      textval: route.query.textval,
+    }),
+    children: [
+      {
+        path: '',
+        meta: (route) => ({
+          title: route.query.labelText,
+          
+        }),
+        component: TabBar,
+      },
+    ],
   },
-  
 ]
 
 const baseRoute = [
