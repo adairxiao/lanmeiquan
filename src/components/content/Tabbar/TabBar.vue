@@ -18,16 +18,18 @@ export default {
   name: "navber",
   data() {
     return {
-      title:"",
+      
       routerTo: null,
       routerFrom: null
     };
   },
-  props: {
+  props:{
+    title:{
+      type:String,
+      default:"标题"
+    }
   },
   mounted() {
-    // 第一次创建组件时从router中mate取值去设置标题
-    this.title=this.$route.meta.title
   },
   components: {
     leftNavBer,
@@ -64,6 +66,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
+    console.log(to);
     next(vm => {
       // 通过 `vm` 访问组件实例
       // vm.routerTo = to.fullPath;

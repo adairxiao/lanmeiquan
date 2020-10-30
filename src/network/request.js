@@ -19,6 +19,7 @@ export function request(config) {
         timeout: 1000 * 12
     })
 
+    // axios的全局配置
     instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 
@@ -38,10 +39,10 @@ export function request(config) {
         
         
         
-        const token = store.state.token
+        // const token = store.state.token
         // 在请求头中token不为空时加入Authoruizetion
         // Authorization请求标头包含用于向服务器认证用户代理的凭证，通常在服务器响应401 Unauthorized状态和WWW-Authenticate标题后
-        token && (config.headers.Authoruizetion = token)
+        // token && (config.headers.Authoruizetion = token)
         return config;
     }, error => Promise.error(error))
 

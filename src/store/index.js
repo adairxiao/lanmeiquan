@@ -4,10 +4,13 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 
-import My_userInfo from "@/store/my/userInfo"
+import userInfo from "@/store/my/userInfo"
 
 export default new Vuex.Store({
+  state:{
+    toast:null
+  },
   modules: {
-    My_userInfo:My_userInfo,
+    userInfo,
   }
 })
