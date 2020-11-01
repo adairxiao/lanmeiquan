@@ -240,8 +240,10 @@ export default {
     // 跳转二级页面
     toPage(title, value) {
       let path = { name: "" };
+
       if (title === "昵称") {
         path.name = "EditInfo";
+
         path.params = { titleVal: title, textType: "text", textval: value };
       } else if (title === "认证信息") {
       }

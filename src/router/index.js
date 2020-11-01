@@ -60,10 +60,7 @@ const my = [
     // which is lazy-loaded when the route is visited.
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
-    component: {
-      My,
-    },
-  },
+    component:My,
 
   {
     path: '/userDetails',
@@ -83,10 +80,6 @@ const my = [
     children: [
       {
         path: '',
-        meta: (route) => ({
-          title: route.query.labelText,
-          
-        }),
         component: TabBar,
       },
     ],

@@ -66,7 +66,6 @@ export default {
     
     next(vm => {
       if (from.name === null) vm.$router.push("UserDetails")
-     
     })
   },
 
