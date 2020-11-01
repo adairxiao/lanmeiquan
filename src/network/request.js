@@ -1,63 +1,34 @@
-import axios from 'axios'
-import base from './hostBase'
-import store from '@/store/index'
-
-import {Toast,Dialog} from 'vant';
+import instance from './axios'
+import Qs from 'qs'
 
 
+export const get = async (url, params = null) => {
+  const res = await instance({
+    url,
+    // `params` 是即将与请求一起发送的 URL 参数
+    // 必须是一个无格式对象(plain object)或 URLSearchParams 对象
+    params,
+    // `paramsSerializer` 是一个负责 `params` 序列化的函数
+    // (e.g. https://www.npmjs.com/package/qs, http://api.jquery.com/jquery.param/)
+    paramsSerializer: (params) => {
+      return Qs.stringify(params, { indices: false })
+    },
+  })
+
+  return res.data
+}
 
 
-
-// 封装错误提示
-
-
-
-export function request(config) {
-
-    const instance = axios.create({
-        baseURL: base.develop,
-        timeout: 1000 * 12
-    })
-
-    // axios的全局配置
-    instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-
-
-    let httpCode = {        //这里我简单列出一些常见的http状态码信息，可以自己去调整配置
-        400: '请求参数错误',
-        401: '权限不足, 请重新登录',
-        403: '服务器拒绝本次访问',
-        404: '请求资源未找到',
-        500: '内部服务器错误',
-        501: '服务器不支持该请求中使用的方法',
-        502: '网关错误',
-        504: '网关超时'
-    }
-
-    //请求拦截
-    instance.interceptors.request.use(config => {
-        
-        
-        
-        // const token = store.state.token
-        // 在请求头中token不为空时加入Authoruizetion
-        // Authorization请求标头包含用于向服务器认证用户代理的凭证，通常在服务器响应401 Unauthorized状态和WWW-Authenticate标题后
-        // token && (config.headers.Authoruizetion = token)
-        return config;
-    }, error => Promise.error(error))
-
-
-
-    // 封装不同状态码对应不同的提示和信息
-    // 使用工厂对象实现
-
-
-    //响应拦截
-    instance.interceptors.response.use(config => {
-        return config
-    }, error => Promise.error(error))
-
-
-
-    return instance(config)
+export const post = async (url, data = null) => {
+  const res = await instance({
+    url,
+    // `data` 是作为请求主体被发送的数据
+    // 只适用于这些请求方法 'PUT', 'POST', 和 'PATCH'
+    // 在没有设置 `transformRequest` 时，必须是以下类型之一：
+    // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
+    // - 浏览器专属：FormData, File, Blob
+    // - Node 专属： Stream
+    data
+  })
+  return res.data
 }

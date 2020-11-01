@@ -94,14 +94,17 @@ import {
   loading as vanLoading,
 } from "vant";
 // import buttomPopup from "./UserDetailsPopup"
-import buttomPopup from "@/components/common/popup/Popup"
-import picker from "@/components/common/picker/Picker.vue"
+import buttomPopup from "@/components/common/popup/Popup";
+import picker from "@/components/common/picker/Picker.vue";
 
-import { EventBus } from "../../../router/eventBus"
-import { mapGetters } from "vuex"
+import { EventBus } from "../../../router/eventBus";
+import { mapGetters } from "vuex";
+
+import {getLoginUrl} from "@/network/api/api.js"
+
 export default {
   name: "UserDetails",
-  inject: ['reload'],
+  inject: ["reload"],
   data() {
     return {
       isEdit: false,
@@ -115,38 +118,37 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'userInfo',
-      'userInfoItem'
-    ]),
-
+    ...mapGetters(["userInfo", "userInfoItem"]),
   },
   filters: {
     // 为空时显示已设置
     isSetUp(value) {
-      value = value !== "" ? "已设置" : value
+      value = value !== "" ? "已设置" : value;
 
       return value;
     },
     // 超出5个字符省略号显示
     gt_ellipsis(value, label) {
-      let val = value || ''
+      let val = value || "";
       if (label === "个性签名") {
-        if (val.length > 5) val = val.substring(0, 5) + "..."
+        if (val.length > 5) val = val.substring(0, 5) + "...";
       }
       return val;
     },
   },
 
   created() {
+    this.$store.dispatch("upDateAsync");
+  },
+  mounted() {
+    console.log(getLoginUrl().then(res=> console.log(res)));
     
-    this.$store.dispatch('upDateAsync')
-
+    
   },
   methods: {
     //刷新当前页
     currentPage() {
-      this.reload("run succes!")
+      this.reload("run succes!");
     },
     isSetItem(name, Negate = false) {
       // 根据是否是设置项添加class，或者渲染不同的项
@@ -183,9 +185,9 @@ export default {
     },
     // 使用popup
     usePopup(title) {
-      this.PopupProps.open = true
-      this.PopupProps.title = title
-      this.PopupProps.picker.showToolbar = true
+      this.PopupProps.open = true;
+      this.PopupProps.title = title;
+      this.PopupProps.picker.showToolbar = true;
       this.PopupProps.picker.columns = [
         {
           values: ["周一", "周二", "周三", "周四", "周五"],
@@ -200,23 +202,22 @@ export default {
     },
     // 跳转二级页面
     toPage(title, value) {
-
-      let path = { name: "" }
+      let path = { name: "" };
       if (title === "昵称") {
-        path.name = 'Name'
-        path.query = { labelText: title, textType: "text", textval: "value" }
-      } else if (title === "认证信息") { }
+        path.name = "Name";
+        path.query = { labelText: title, textType: "text", textval: "value" };
+      } else if (title === "认证信息") {
+      }
 
       this.$router.push(path);
     },
     // 处理picker发送过来的事件
     pickerConfirm(value) {
-      console.log(value)
+      console.log(value);
     },
     pickerCancel(value) {
-      this.PopupProps.open = value
-    }
-
+      this.PopupProps.open = value;
+    },
   },
   components: {
     vanImage,
