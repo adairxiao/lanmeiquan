@@ -61,7 +61,7 @@ const my = [
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
     component:My,
-
+  },
   {
     path: '/userDetails',
     name: 'UserDetails',
@@ -89,11 +89,8 @@ const my = [
     children: [
       {
         path: '',
-<<<<<<< HEAD
-=======
         name: 'Name',
         props:{title:"修改昵称"},
->>>>>>> ba4644213d329d13f95d87bf7b9b63b76044586d
         component: TabBar,
       },
     ],
