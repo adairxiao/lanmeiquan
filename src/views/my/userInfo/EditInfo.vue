@@ -61,10 +61,13 @@ export default {
 
   },
   mounted(){
+    console.log("this.$parent",this.$parent);
+    console.log(this.$route);
   },
   beforeRouteEnter (to, from, next) {
-    
+   
     next(vm => {
+      
       if (from.name === null) vm.$router.push("UserDetails")
     })
   },

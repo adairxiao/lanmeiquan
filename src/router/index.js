@@ -66,20 +66,34 @@ const my = [
     path: '/userDetails',
     name: 'UserDetails',
     component: userDetails,
+    children: [
+      {
+        path: '',
+        props:{title:"编辑个人主页"},
+        component: TabBar,
+      },
+    ],
   },
 
   {
     path: '/editInfo',
     name: 'EditInfo',
+    meta: { title: 'EditInfo' },
     component: editInfo,
     props: (route) => ({
       labelText: route.query.labelText,
       textType: route.query.textType,
       textval: route.query.textval,
+      
     }),
     children: [
       {
         path: '',
+<<<<<<< HEAD
+=======
+        name: 'Name',
+        props:{title:"修改昵称"},
+>>>>>>> ba4644213d329d13f95d87bf7b9b63b76044586d
         component: TabBar,
       },
     ],
