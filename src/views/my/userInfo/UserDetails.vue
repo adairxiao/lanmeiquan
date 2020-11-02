@@ -100,7 +100,7 @@ import picker from "@/components/common/picker/Picker.vue";
 import { EventBus } from "../../../router/eventBus";
 import { mapGetters } from "vuex";
 
-import {getLoginUrl} from "@/network/api/api.js"
+import { getLoginUrl } from "@/network/api/api.js"
 
 export default {
   name: "UserDetails",
@@ -141,9 +141,17 @@ export default {
     this.$store.dispatch("upDateAsync");
   },
   mounted() {
-    console.log(getLoginUrl().then(res=> console.log(res)));
+    const load= this.$toast.loading({ message: "" ,duration:0})
     
-    
+    console.log(getLoginUrl().then(res => {
+      load.clear()
+      
+      console.log(res)
+    }));
+
+
+
+
   },
   methods: {
     //刷新当前页
@@ -154,8 +162,8 @@ export default {
       // 根据是否是设置项添加class，或者渲染不同的项
       let result =
         name === "认证信息" ||
-        name === "设置会员订阅" ||
-        name === "设置微信号打赏"
+          name === "设置会员订阅" ||
+          name === "设置微信号打赏"
           ? true
           : false;
       if (Negate) {

@@ -1,4 +1,4 @@
-import instance from './axios'
+import instance from '@/network/axios.js'
 import Qs from 'qs'
 
 
@@ -13,8 +13,10 @@ export const get = async (url, params = null) => {
     paramsSerializer: (params) => {
       return Qs.stringify(params, { indices: false })
     },
-  })
-
+  }).catch((err)=>{
+    return err
+  });
+  
   return res.data
 }
 
@@ -29,6 +31,9 @@ export const post = async (url, data = null) => {
     // - 浏览器专属：FormData, File, Blob
     // - Node 专属： Stream
     data
-  })
+  }).catch((err)=>{
+    return err
+  });
+  
   return res.data
 }
