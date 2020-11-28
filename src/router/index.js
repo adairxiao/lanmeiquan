@@ -5,8 +5,6 @@ Vue.use(VueRouter)
 const TabBar = () => import('components/content/Tabbar/TabBar')
 const Login = () => import('@/views/login/Login')
 const Forget = () => import('@/views/forget/Forget')
-const sendCode = () => import('@/views/login/SendCode')
-const foundUser = () => import('@/views/login/FoundUser')
 
 const login = [
   {
@@ -21,19 +19,6 @@ const login = [
       },
     ],
   },
-
-  {
-    path: '/sendCode',
-    name: 'sendCode',
-    meta: { title: '' },
-    component: sendCode,
-  },
-  {
-    path: '/foundUser',
-    name: 'foundUser',
-    meta: { title: '' },
-    component: foundUser,
-  },
   {
     path: '/forget',
     name: 'Forget',
@@ -44,6 +29,15 @@ const login = [
         path: '',
       },
     ],
+  },
+]
+const Home = () => import('@/views/home/home')
+const home = [
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home,
+    children: [{ path: '', component: TabBar }],
   },
 ]
 
@@ -60,7 +54,7 @@ const my = [
     // which is lazy-loaded when the route is visited.
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '@/views/home/Home'),
-    component:My,
+    component: My,
   },
   {
     path: '/userDetails',
@@ -69,7 +63,7 @@ const my = [
     children: [
       {
         path: '',
-        props:{title:"编辑个人主页"},
+        props: { title: '编辑个人主页' },
         component: TabBar,
       },
     ],
@@ -84,13 +78,12 @@ const my = [
       labelText: route.query.labelText,
       textType: route.query.textType,
       textval: route.query.textval,
-      
     }),
     children: [
       {
         path: '',
         name: 'Name',
-        props:{title:"修改昵称"},
+        props: { title: '修改昵称' },
         component: TabBar,
       },
     ],
@@ -104,7 +97,7 @@ const baseRoute = [
   },
 ]
 
-const routes = [...baseRoute, ...login, ...my]
+const routes = [...baseRoute, ...login, ...my,...home]
 const router = new VueRouter({
   routes,
   mode: 'history',
@@ -115,13 +108,10 @@ router.beforeEach((to, from, next) => {
   // 输入路由不正确重定向到login页面（已实现）
   // 未登录跳转login（未实现）
   // 以登录跳转找不到页面或者当前页（未实现）
-  const rs = routes.map(e => {
+  const rs = routes.map((e) => {
     return e.name
   })
   if (!rs.includes(to.name)) next({ name: 'Login' })
-  else next() 
-
-
-
+  else next()
 })
 export default router

@@ -2,14 +2,28 @@ import axios from 'axios'
 import { Toast } from 'vant'
 
 /**
- * http
+ * axios
  * @param {Object} config 请求参数
- * @returns {Object} axios instance  axios实例
+ * @returns axios instance  
  */
+
+// 用于存储目前状态为pending的请求标识信息
+let url = []
+let pendingRequest= new Array()
+url.push({
+  pendingRequest:"xxx"
+
+})
+// function 
+
+//
+
+
+
 const instance = axios.create({
   // baseURL: '/api',
-  timeout: 1000 * 10,
-  // `withCredentials` 表示跨域请求时是否需要使用凭证
+  timeout: 1000 * 6,
+  // 表示跨域请求时是否需要使用凭证
   withCredentials: true, // default
 })
 
@@ -23,7 +37,12 @@ instance.defaults.headers.post['Content-Type'] =
 //请求拦截
 instance.interceptors.request.use(
   (config) => {
-    // console.log("config",config);
+
+     /**
+     * 为每一次请求生成一个cancleToken
+     */
+    const source = axios.CancelToken.source();
+    config.cancelToken = source.token;
 
     // const token = store.state.token
     // 在请求头中token不为空时加入Authoruizetion

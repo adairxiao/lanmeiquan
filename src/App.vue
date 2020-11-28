@@ -19,6 +19,7 @@ export default {
     }
   },
   methods:{
+    // 解决刷新白屏的问题
     reload(text){
       console.log(text);
       this.isRouterAlive = false
@@ -34,5 +35,4 @@ export default {
 // 引入base.css
 @import "assets/css/base.css";
 
-// background-color: #f2f2f2;
 </style>
