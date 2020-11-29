@@ -1,20 +1,29 @@
 <template>
   <div>
     <div class="header-box"><router-view /></div>
-    <div class="banner"><banner /></div>
+    <div class="body-box">
+      <div class="banner"><swipe /></div>
+      <div class="card">
+        <WaterFall>
+          
+        </WaterFall>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import banner from "@/views/home/swipe/swipe"
+import swipe from "@/views/home/swipe/swipe"
+import WaterFall from "@/views/home/waterfall/waterfall"
 export default {
   components: {
-    banner
+    swipe,
+    WaterFall
   }
 }
 </script>
 
 
 <style lang="less">
-@import "home";
+@import "index";
 </style>

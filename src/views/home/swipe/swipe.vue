@@ -98,7 +98,7 @@ export default {
       const x = e.changedTouches[0].pageX - this.startX
       this.endX += x
       x > 0 ? this.prev() : this.next()
-      
+      this.Autoplay(this.index)
     },
     prev() {
       // 翻页
@@ -109,6 +109,7 @@ export default {
       this.endX = this.currentOffsetx
       this.$refs.wrap.style.left = this.currentOffsetx + 'px'
       console.log("prev");
+
     },
     next() {
       // 翻页
