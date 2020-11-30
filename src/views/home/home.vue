@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <div class="header-box"><router-view /></div>
     <div class="body-box">
       <div class="banner"><swipe /></div>

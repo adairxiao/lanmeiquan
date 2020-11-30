@@ -30,6 +30,7 @@ const instance = axios.create({
 // axios baseURL
 // instance.defaults.baseURL = process.env.VUE_APP_BASE_API
 instance.defaults.baseURL = '/api'
+
 // axios的全局配置
 instance.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
@@ -37,7 +38,7 @@ instance.defaults.headers.post['Content-Type'] =
 //请求拦截
 instance.interceptors.request.use(
   (config) => {
-
+    console.log(config);
      /**
      * 为每一次请求生成一个cancleToken
      */

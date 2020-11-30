@@ -108,7 +108,7 @@ export default {
       this.currentOffsetx = this.showWidth * this.index
       this.endX = this.currentOffsetx
       this.$refs.wrap.style.left = this.currentOffsetx + 'px'
-      console.log("prev");
+      // console.log("prev");
 
     },
     next() {
@@ -120,13 +120,13 @@ export default {
       this.endX = this.currentOffsetx
       this.$refs.wrap.style.left = this.currentOffsetx + 'px'
 
-      console.log("next");
+      // console.log("next");
     },
     Autoplay(index) {
       // 自动播放
       const self = this
       this.intervalID = setInterval(() => {
-        console.log(index--);
+        index--
         if(index ===-(self.imgs.length-1)){
           index = -1
         }

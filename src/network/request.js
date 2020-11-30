@@ -2,7 +2,12 @@ import instance from '@/network/axios.js'
 import Qs from 'qs'
 
 
-export const get = async (url, params = null) => {
+export const get = async (url, params = null,baseURL=null) => {
+  
+  if(baseURL!==null){
+    instance.defaults.baseURL = baseURL
+  }
+  
   const res = await instance({
     url,
     // `params` 是即将与请求一起发送的 URL 参数
