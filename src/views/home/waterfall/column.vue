@@ -33,7 +33,13 @@ export default {
 
     }
   },
+  watch:{
+    columnList(value){
+       console.log(value);
+    }
+  },
   mounted() {
+   
   }
 }
 </script>
@@ -41,7 +47,7 @@ export default {
 <style lang="less">
 .column {
   width: 30%;
-
+  
   .column-content {
     position: relative;
     padding: 2px;
