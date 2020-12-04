@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column" >
     <template>
       <slot name="first-col"></slot>
     </template>
@@ -9,9 +9,10 @@
       class="column-content"
       v-for="(item, index) in columnList"
       :key="index"
+      ref="c1"
     >
-      <div class="content-img">
-        <img :src="item.img" :alt="index" />
+      <div class="content-img" >
+        <img :src="item.img" :alt="index" :style="{height:setHeight(item.width,item.height)}"  />
       </div>
       <div class="content-bottom-box">
         <span>xxxxxxxxx</span>
@@ -33,14 +34,21 @@ export default {
 
     }
   },
-  watch:{
-    columnList(value){
-       console.log(value);
-    }
+  updated(){
+
+    this.$nextTick(()=>{
+      
+    })
+    
   },
-  mounted() {
-   
+  methods:{
+    setHeight(w,h){
+      console.log(this.$refs.c1.offsetWidth);
+      
+      console.log(h*0.3);
+    }
   }
+  
 }
 </script>
 

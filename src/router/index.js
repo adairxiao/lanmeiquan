@@ -41,6 +41,16 @@ const home = [
   },
 ]
 
+const Find = () => import('@/views/find/find')
+const find = [
+  {
+    path: '/find',
+    name: 'Find',
+    component: Find,
+    children: [{ path: '', component: TabBar }],
+  },
+]
+
 const My = () => import('@/views/my/MyHome')
 const userDetails = () => import('@/views/my/userInfo/UserDetails')
 const editInfo = () => import('@/views/my/userInfo/EditInfo')
@@ -97,7 +107,7 @@ const baseRoute = [
   },
 ]
 
-const routes = [...baseRoute, ...login, ...my,...home]
+const routes = [...baseRoute, ...login, ...my,...home,...find]
 const router = new VueRouter({
   routes,
   mode: 'history',

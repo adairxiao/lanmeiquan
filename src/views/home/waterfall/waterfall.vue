@@ -1,5 +1,5 @@
 <template>
-  <div class="water-fall" ref="waterfall">
+  <div class="water-fall">
     <column :columnList="columnList1" ref="column1">
       <template #first-col>
         <div></div>
@@ -21,6 +21,7 @@
 <script>
 import column from '@/views/home/waterfall/column.vue'
 import { getImages } from "@/network/api/api.js"
+import LoginVue from '../../login/Login.vue'
 export default {
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
       columnList2: [],
       columnList3: [],
       renderIndex: -1, // 渲染第几个item
-      isRendering:false
+      isRendering: false
     }
   },
   watch: {
@@ -47,14 +48,13 @@ export default {
       console.log(this.itemList);
       this.renderData()
     })
-
+    
 
   },
   methods: {
     // 获取高度
     columsHeight() {
       // 通过ref获取每列高度，column1，column2，column3，column4分别代表第一、二、三列
-      console.log(this.$refs.column1.$el);
       return [this.$refs.column1.$el.offsetHeight, this.$refs.column2.$el.offsetHeight, this.$refs.column3.$el.offsetHeight]
     },
     // 获取高度最小索引函数
@@ -67,17 +67,17 @@ export default {
       );
     },
     renderData() {
-      
-      if (this.renderIndex === this.itemList.length) return
-      if(this.isRendering) return
+
+      // if (this.renderIndex === this.itemList.length - 1) return
+      if (this.renderIndex === 3) return
+      if (this.isRendering) return
       this.isRendering = true
       // 获取各列最小高度
       let columsHeight = this.columsHeight()
       let minHeight = Math.min.apply(null, columsHeight);
       this.getMinhIndex(columsHeight, minHeight).then(minIndex => {
-
         const key = `columnList${minIndex + 1}`
-
+        console.log(key, this.renderIndex + 1);
         let itemData = this.itemList[this.renderIndex + 1];
 
         this[key] = this[key].concat(itemData);
@@ -88,6 +88,7 @@ export default {
         });
 
       })
+
     }
   },
 
