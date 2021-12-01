@@ -1,24 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"
-    />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <!-- <script src="https://g.alicdn.com/gdt/jsapi/1.9.18/index.js"></script> -->
+  <script src="https://g.alicdn.com/code/npm/@ali/dingtalk-h5-remote-debug-sdk/0.1.1/app.bundle.js"></script>
+  <script>
+    h5RemoteDebugSdk.init({
+      uuid: "ecda56ef-25a5-41ad-984b-0cfa6998d6d6",
+      observerElement: document.documentElement,
+    });
+  </script>
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+        continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <!-- 通用采集 SDK -->
+  <script>
+    (function (w, d, s, q, i) {
+      w[q] = w[q] || [];
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+      j.async = true;
+      j.id = 'beacon-aplus';
+      j.src = 'https://alidt.alicdn.com/alilog/mlog/aplus_cloud.js';
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'aplus_queue');
+
+    aplus_queue.push({
+      action: 'aplus.setMetaInfo',
+      arguments: ['aplus-rhost-v', 'alog.zjzwfw.gov.cn']
+    });
+    aplus_queue.push({
+      action: 'aplus.setMetaInfo',
+      arguments: ['aplus-rhost-g', 'alog.zjzwfw.gov.cn']
+    });
+
+    var u = navigator.userAgent
+    var isAndroid = u.indexOf('Android') > -1
+    var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+
+    aplus_queue.push({
+      action: 'aplus.setMetaInfo',
+      arguments: ['appId', isAndroid ? '28302650' : isIOS ? '28328447' : '47130293']
+    });
+  </script>
+  <script>
+    // 稳定性监控代码
+    try {
+      constconfig = {
+        bid: 'dhglzdyxs_zzdpro', //唯一标识 需要去开发者后台获取
+        signkey: '1234567890abcdef',
+        gateway: 'https://wpk-gate.zjzwfw.gov.cn'
+      };
+      constwpk = newwpkReporter(config);
+      wpk.installAll();
+      window._wpk = wpk;
+    } catch (err) {
+      console.error('WpkReporter init fail', err);
+    }
+
+    document.body.style.overflow='hidden';
+  </script>
+</body>
+
 </html>

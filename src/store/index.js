@@ -1,16 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Public from "./Public"
 
 Vue.use(Vuex)
 
-
-import userInfo from "@/store/my/userInfo"
-
 export default new Vuex.Store({
-  state:{
-    toast:null
-  },
   modules: {
-    userInfo,
+    Public,
+    mode: 'hash'
   }
 })
