@@ -1,200 +1,211 @@
 <template>
   <div>
-    <div class="item-title">基本信息</div>
-    <div class="page-body">
-      <van-form @submit="onSubmit">
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.datafrom"
-          label="事件类型来源"
-          placeholder="请选择事件类型来源"
-          input-align="right"
-          @click="openPopup('事件类型来源')"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.rwlx"
-          label="任务类型"
-          placeholder="请选择任务类型"
-          input-align="right"
-          @click="openPopup('任务类型')"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.qdlx"
-          label="清单类型"
-          placeholder="请选择清单类型"
-          input-align="right"
-          @click="openPopup('清单类型')"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.type"
-          label="事件类型"
-          input-align="right"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          v-model="from.gis"
-          label="位置信息"
-          placeholder="请输入位置信息"
-          autosize
-          type="textarea"
-          maxlength="500"
-          show-word-limit
-          input-align="right"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.realname"
-          label="反馈人姓名"
-          input-align="right"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.mobile"
-          label="联系电话"
-          input-align="right"
-        />
-        <!-- <van-field
-        readonly
-        clickable
-        name="picker"
-        :value="from.blbm"
-        label="处理部门"
-        placeholder="请选择处理部门"
-        input-align="right"
-        @click="openPopup('处理部门')"
-      /> -->
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          v-model="from.blbm"
-          label="处理部门"
-          placeholder="请选择处理部门"
-          input-align="right"
-          @click="openPopup('处理部门')"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="from.blryname"
-          label="处理人员"
-          placeholder="请选择处理人员"
-          input-align="right"
-          @click="openPopup('处理人员')"
-        />
-        <van-field
-          readonly
-          clickable
-          name="picker"
-          :value="currentDate"
-          label="完成时限"
-          placeholder="请输入完成时限"
-          input-align="right"
-          @click="openPopup('完成时限')"
-        />
-        <van-field
-          readonly
-          :value="from.content"
-          rows="2"
-          autosize
-          label-width="130"
-          label="事件问题描述:"
-          type="textarea"
-          maxlength="500"
-          show-word-limit
-        />
-        <div class="img-box ">
-          <div style="margin-bottom:10px;font-size: 14px;">现场情况图片</div>
-          <van-swipe :autoplay="3000" indicator-color="white">
-            <van-swipe-item
-              v-for="(img, index) in imgs"
-              :key="img.id"
-              @click="handleClickimg(index)"
-            >
-              <van-image width="95%" height="170" :src="src + img.attpath" fit="contain"/>
-            </van-swipe-item>
-            <!-- http://192.168.0.243:8100/files/ -->
-            <!--  :src="'http://47.100.192.253:8100/files/' + img.attpath"-->
-          </van-swipe>
-        </div>
+    <el-form ref="form" label-width="100px">
+      <el-form-item label="事件类型来源">
+        <el-select
+          v-model="from.datafrom"
+          placeholder="请选择"
+          :disabled="row.state === '1'"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in eventCol"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="任务类型">
+        <el-select
+          v-model="from.rwlx"
+          placeholder="请选择"
+          :disabled="row.state === '1'"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in taskCol"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="清单类型">
+        <el-select
+          v-model="from.qdlx"
+          placeholder="请选择"
+          :disabled="row.state === '1'"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in listCol"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="事件类型">
+        <el-select
+          v-model="from.type"
+          placeholder="请选择"
+          disabled
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in eventTypeCol"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
 
-        <!-- <van-image
+      <el-form-item label="位置信息">
+        <el-input
+          v-model="from.gis"
+          type="textarea"
+          :autosize="{
+            minRows: 2
+          }"
+          placeholder="请输入位置信息"
+          disabled
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="反馈人姓名">
+        <el-input
+          v-model="from.realname"
+          placeholder="请输入反馈人姓名"
+          disabled
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="联系电话">
+        <el-input
+          v-model="from.mobile"
+          placeholder="请输入联系电话"
+          disabled
+        ></el-input>
+      </el-form-item>
+
+      <el-form-item label="处理部门">
+        <el-select
+          v-model="from.blbm"
+          placeholder="请选择"
+          :disabled="row.state === '1'"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in blbmCol"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="处理人员">
+        <el-input
+          v-model="from.blryname"
+          placeholder="请选择处理人员"
+          :disabled="row.state === '1'"
+        >
+          <template slot="append"
+            ><span @click="openPopup('处理人员')">选择</span></template
+          >
+        </el-input>
+      </el-form-item>
+      <el-form-item label="完成时限">
+        <el-date-picker
+          v-model="currentDate"
+          type="datetime"
+          placeholder="请输入完成时限"
+          align="right"
+          format="yyyy-MM-dd HH-mm"
+          value-format="yyyy-MM-dd HH:mm"
+          :disabled="row.state === '1'"
+          style="width:100%"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="事件问题描述">
+        <el-input
+          v-model="from.content"
+          type="textarea"
+          :autosize="{
+            minRows: 2
+          }"
+          placeholder="请输入事件问题描述"
+          disabled
+        ></el-input>
+      </el-form-item>
+      <div class="img-box ">
+        <div style="margin-bottom:10px;font-size: 14px;">现场情况图片</div>
+        <van-swipe :autoplay="3000" indicator-color="white">
+          <van-swipe-item v-for="(img, index) in spliImgs" :key="index">
+            <el-image
+              style="width: 100%; height: 300px"
+              :src="img"
+              fit="contain"
+              :preview-src-list="spliImgs"
+            >
+            </el-image>
+            <!-- <van-image width="95%" height="170" :src="img" /> -->
+          </van-swipe-item>
+          <!-- http://192.168.0.243:8100/files/ -->
+          <!--  :src="'http://47.100.192.253:8100/files/' + img.attpath"-->
+        </van-swipe>
+      </div>
+
+      <!-- <van-image
           width="100%"
           height="170"
           :src="require('./../../assets/images/WechatIMG151.jpeg')"
         /> -->
-        <van-field
-          v-show="state === '1'"
+      <el-form-item label="处理描述">
+        <el-input
+          v-show="row.state === '1'"
           v-model="content"
-          rows="2"
-          autosize
-          label="处理描述:"
           type="textarea"
-          maxlength="500"
-          show-word-limit
-        />
-        <div class="img-box" v-show="state === '1'">
-          <div style="margin-bottom:10px;font-size: 14px;">
-            处理现场情况图片
-          </div>
-          <filesSelect @sendFiles="onSendFiles" />
+          :autosize="{
+            minRows: 2
+          }"
+          placeholder="请输入处理描述描述"
+        ></el-input>
+      </el-form-item>
+
+      <div class="img-box" v-show="row.state === '1'">
+        <div style="margin-bottom:5px;font-size: 14px;">
+          处理现场情况图片
         </div>
-        <div style="margin: 16px;">
-          <van-button round block type="info" native-type="submit"
-            >提交</van-button
-          >
-          <div style="width:100%;height:10px"></div>
-          <van-button
-            round
-            block
-            type="danger"
-            native-type="button"
-            v-show="tab === '待受理'"
-            @click="onBack"
-            >退回</van-button
-          >
-        </div>
-        <div style="height:80px"></div>
-      </van-form>
-    </div>
-    <van-popup v-model="showPicker" position="bottom" :overlay="false">
-      <van-datetime-picker
-        v-model="currentDate"
-        type="datetime"
-        title="选择完整时间"
-        @confirm="onConfirm"
-        @change="onChange"
-        @cancel="showPicker = false"
-        :min-date="minDate"
-        :max-date="maxDate"
-      />
-    </van-popup>
-    <van-popup v-model="showListPicker" position="bottom" :overlay="false">
-      <van-picker
-        show-toolbar
-        :columns="columns"
-        @confirm="onListConfirm"
-        @cancel="showListPicker = false"
-      />
-    </van-popup>
+        <filesSelect @sendFiles="onSendFiles" />
+      </div>
+      <div style="margin: 16px;">
+        <van-button
+          round
+          block
+          type="info"
+          native-type="button"
+          @click="onSubmit"
+          >提交</van-button
+        >
+        <div style="width:100%;height:5px"></div>
+        <van-button
+          round
+          block
+          type="danger"
+          native-type="button"
+          v-show="tab === '待受理'"
+          @click="onBack"
+          >退回</van-button
+        >
+      </div>
+      <div style="height:80px"></div>
+    </el-form>
   </div>
 </template>
 
@@ -202,13 +213,12 @@
 import { Form as VanForm } from "vant";
 import { Field as VanField } from "vant";
 import { Button as VanButton } from "vant";
-import { Image as VanImage, ImagePreview } from "vant";
+import { Image as VanImage } from "vant";
 import { Picker as VanPicker } from "vant";
 import { Swipe as VanSwipe, SwipeItem as VanSwipeItem } from "vant";
 import { DatetimePicker as VanDatetimePicker, Popup as vanPopup } from "vant";
 import filesSelect from "./filesSelect.vue";
-import config from "@/util/config.js";
-import { currentPage } from "@/util/buryingPoint";
+import config from "@/util/config";
 import { mapState } from "vuex";
 import {
   getEvenDetail,
@@ -226,8 +236,7 @@ export default {
   data() {
     return {
       src: imgPath,
-      id: "",
-      state: 0,
+      // state: 0,
       isClick: false,
       tab: "",
       from: {
@@ -242,10 +251,10 @@ export default {
         rwlx: "",
         qdlx: "",
       },
+      base64: [],
       blryuid: "",
       imgs: [],
       content: "",
-      base64: [],
       currentDate: "",
       showPicker: false,
       showListPicker: false,
@@ -258,9 +267,54 @@ export default {
       maxDate: new Date(2125, 10, 1),
     };
   },
+  props: {
+    row: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    tab: {
+      type: String,
+      default: "",
+    },
+  },
+  watch: {
+    row: {
+      handler(row) {
+        // dd.confirm({
+        //   title: "hasLogin",
+        //   message: JSON.stringify({ 1: ID }),
+        //   buttonLabels: ["ok", "cancel"],
+        // });
+        getEvenDetail(row.id).then((res) => {
+          this.from = res.data;
+          this.currentDate = res.data.wcsx;
+        });
+        getEventattList(row.id).then((res) => {
+          this.imgs = res.data;
+        });
+
+        getSjly().then((res) => {
+          this.eventTypeCol = res.data.split(",");
+        });
+        getRwlx().then((res) => {
+          this.taskCol = res.data.split(",");
+        });
+        getQdlx().then((res) => {
+          this.listCol = res.data.split(",");
+        });
+        getBlbm().then((res) => {
+          this.blbmCol = res.data.split(",");
+        });
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   computed: {
     ...mapState("Public", ["user"]),
-    splicImgs() {
+    spliImgs() {
       return this.imgs.map((img) => this.src + img.attpath);
     },
   },
@@ -277,9 +331,8 @@ export default {
     filesSelect,
   },
   mounted() {
-    this.state = this.$route.query.state;
-    this.id = this.$route.query.id;
-    this.tab = this.$route.query.tab;
+    // this.state = this.$route.query.state;
+    // this.tab = this.$route.query.tab;
 
     // dd.confirm({
     //     title: "data",
@@ -287,38 +340,17 @@ export default {
     //     buttonLabels: ["ok", "cancel"],
     //   });
 
-    getEvenDetail(this.id).then((res) => {
-      this.from = res.data;
-      // dd.confirm({
-      //   title: "data",
-      //   message: JSON.stringify(this.from ),
-      //   buttonLabels: ["ok", "cancel"],
-      // });
-      this.currentDate = res.data.wcsx;
+    aplus_queue.push({
+      action: "aplus.sendPV",
+      arguments: [
+        {
+          is_auto: false,
+        },
+        {
+          page_name: "处理任务",
+        },
+      ],
     });
-    getEventattList(this.id).then((res) => {
-      this.imgs = res.data;
-    });
-
-    getSjly().then((res) => {
-      this.eventTypeCol = res.data.split(",");
-    });
-    getRwlx().then((res) => {
-      this.taskCol = res.data.split(",");
-      // dd.confirm({
-      //   title: "data",
-      //   message: JSON.stringify({2:this.taskCol}),
-      //   buttonLabels: ["ok", "cancel"],
-      // });
-    });
-    getQdlx().then((res) => {
-      this.listCol = res.data.split(",");
-    });
-    getBlbm().then((res) => {
-      this.blbmCol = res.data.split(",");
-    });
-
-    currentPage(2, "处理任务", "/solveTask");
   },
 
   methods: {
@@ -329,14 +361,15 @@ export default {
       //   buttonLabels: ["ok", "cancel"],
       // });
 
-      if (this.state !== "1") {
+      if (this.row.state !== "1") {
         const data = {
-          eventid: this.id,
+          eventid: this.row.id,
           accept: "同意",
           blbm: this.from.blbm,
           blryuid: this.blryuid,
           blryname: this.from.blryname,
           wcsx: this.currentDate,
+
           datafrom: this.from.datafrom,
           rwlx: this.from.rwlx,
           qdlx: this.from.qdlx,
@@ -355,11 +388,6 @@ export default {
         } else if (!data.wcsx) {
           dd.toast({
             text: "完成时限不能为空", //提示信息
-          });
-          return;
-        } else if (!data.datafrom) {
-          dd.toast({
-            text: "事件类型来源不能为空", //提示信息
           });
           return;
         } else if (!data.rwlx) {
@@ -397,7 +425,7 @@ export default {
             });
           });
           this.isClick = false;
-          this.$router.replace("/home");
+          this.$emit("closeDialog");
         });
       } else {
         if (!this.content) {
@@ -414,7 +442,7 @@ export default {
         // }
 
         const data = {
-          eventid: this.id,
+          eventid: this.row.id,
           content: this.content,
           // base64: this.base64,
         };
@@ -425,15 +453,25 @@ export default {
         }).then((res) => {
           this.isClick = true;
         });
-
         eventCommit(data).then((res) => {
+          // dd.confirm({
+          //   title: "data",
+          //   message: JSON.stringify(res),
+          //   buttonLabels: ["ok", "cancel"],
+          // });
+          if (res.code !== "200") {
+            dd.toast({
+              text: "提交成功", //提示信息
+            });
+            return;
+          }
           dd.hideLoading({}).then((res) => {
             dd.toast({
               text: "提交成功", //提示信息
             });
           });
           this.isClick = false;
-          this.$router.replace("/home");
+          this.$emit("closeDialog");
         });
       }
     },
@@ -449,14 +487,14 @@ export default {
             dd.toast({
               text: "提交成功", //提示信息
             });
-            _that.$router.replace("/home");
+            _that.$emit("closeDialog");
           });
         }
       });
     },
     openPopup(name) {
       this.currentCell = name;
-      if (this.state === "1") return;
+      if (this.row.state === "1") return;
       if (name === "处理部门") {
         // dd.chooseDepartments({
         //   title: "请选择处理部门",
@@ -541,20 +579,6 @@ export default {
           break;
       }
     },
-
-    handleClickimg(index) {
-      ImagePreview({
-        images: this.splicImgs,
-        startPosition: index,
-        closeable: true,
-        swipeDuration:0,
-        loop:false,
-        transition:'',
-        overlayStyle: {
-          animation:'none'
-        },
-      });
-    },
   },
 };
 </script>
@@ -571,6 +595,21 @@ export default {
 }
 
 .img-box {
-  margin: 20px 0 0 30px;
+  margin-left: 10px;
+}
+
+/deep/ .el-input.is-disabled .el-input__inner {
+    background-color: #fff !important;
+    border-color: #e4e7ed !important;
+    color: black !important;
+    cursor: pointer !important;
+}
+
+/deep/  .el-textarea.is-disabled .el-textarea__inner {
+    background-color: #fff !important;
+    border-color: #e4e7ed !important;
+    color: black !important;
+    cursor: pointer !important;
 }
 </style>
+

@@ -4,9 +4,14 @@ const state = {
   user: {},
   taskFrom: {},
   status: false,
+  platform: "mobile",
 };
 
-const getters = {};
+const getters = {
+  hasLogin(state){
+    return JSON.stringify(state.user)=== "{}"
+  }
+};
 
 const mutations = {
   setUser(state, obj) {
@@ -17,6 +22,8 @@ const mutations = {
     //   message: JSON.stringify(obj),
     //   buttonLabels: ["ok", "cancel"],
     // });
+
+    
     state["user"] = obj;
     aplus_queue.push({
       action: "aplus.setMetaInfo",
@@ -35,14 +42,18 @@ const mutations = {
       action: "aplus.setMetaInfo",
       arguments: ["_hold", "START"],
     });
-    dd.setStorageItem({
-      name: "user",
-      value: JSON.stringify(obj),
-    });
+    // dd.setStorageItem({
+    //   name: "user",
+    //   value: JSON.stringify(obj),
+    // });
+    
   },
   setTaskFrom(state, obj) {
     // item {key,value}
     state["taskFrom"] = obj;
+  },
+  setPlatform(state, value) {
+    state.platform = value;
   },
 };
 
@@ -51,11 +62,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       dd.getAuthCode({ corpId: "" })
         .then((result) => {
-          dd.confirm({
-            title: "authConfigsuss",
-            message: JSON.stringify(result),
-            buttonLabels: ["ok", "cancel"],
-          });
           if (result) {
             resolve(result);
           } else {
@@ -98,14 +104,18 @@ const actions = {
     //     });
     //   return;
     // }
-
+    
     const code_res = await dispatch("getCode");
-
+    
+    code_res.code = code_res.hasOwnProperty("code")
+      ? code_res.code
+      : code_res.auth_code;
     const user_res = await getToken(code_res.code);
-
+    
     if (String(user_res.code) === "200") {
+      dd.hideLoading({});
       commit("setUser", user_res.data);
-
+      
       dd.authConfig({
         ticket: user_res.data.ticket,
         jsApiList: [
@@ -115,8 +125,12 @@ const actions = {
           "uploadFile",
         ],
       })
-        .then((res) => {})
-        .catch((err) => {});
+        .then((res) => {
+          
+        })
+        .catch((err) => {
+          
+        });
       // dd.removeStorageItem({
       //   name: "user",
       // });

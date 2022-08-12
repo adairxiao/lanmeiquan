@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="item-title">新增任务</div>
+    <div class="item-title">修改任务</div>
 
     <div class="page-body">
       <van-form @submit="onSubmit">
@@ -125,7 +125,7 @@
         />
         <div class="img-box ">
           <div style="margin-bottom:10px;font-size: 14px;">现场情况图片</div>
-          <filesSelect @sendFiles="onSendFiles" />
+          <filesSelect ref="filesSelect" @sendFiles="onSendFiles" />
         </div>
 
         <!-- <van-image
@@ -133,6 +133,22 @@
           height="170"
           :src="require('./../../assets/images/WechatIMG151.jpeg')"
         /> -->
+        <template v-if="statetext === '完成'">
+          <van-field
+            clickable
+            :value="result"
+            label="处理内容："
+            type="textarea"
+            autosize
+          />
+
+          <div class="img-box ">
+            <div style="margin-bottom:10px;font-size: 14px;">
+              处理后现场情况图片
+            </div>
+            <filesSelect ref="filesSelectTow" @sendFiles="onSendFilesTow" />
+          </div>
+        </template>
         <div style="margin: 16px;">
           <van-button round block type="info" native-type="submit"
             >提交</van-button
@@ -179,13 +195,16 @@ import { Image as VanImage } from "vant";
 import filesSelect from "./filesSelect.vue";
 import { mapMutations } from "vuex";
 import {
-  saveFromzzd,
+  updateEvent,
   uploadBybase64,
+  getEvenDetail,
   getSjlx,
   getSjly,
   getRwlx,
   getQdlx,
   getBlbm,
+  getEventattList,
+  getNodeList,
 } from "@/network/api/api";
 import { formatDate } from "@/util/data";
 import { currentPage } from "@/util/buryingPoint";
@@ -193,6 +212,7 @@ import Schema from "async-validator";
 export default {
   data() {
     return {
+      id: null,
       title: "",
       showPicker: false,
       eventCol: [],
@@ -218,6 +238,10 @@ export default {
       currentCell: "",
       base64: [],
       currentDate: "",
+      statetext: "",
+      base642: [],
+      // 处理后内容
+      result: "",
       shoDtaPicker: false,
       minDate: new Date(),
       maxDate: new Date(2125, 10, 1),
@@ -264,6 +288,51 @@ export default {
     vanPopup,
   },
   mounted() {
+    this.id = this.$route.query.id;
+    getEvenDetail(this.id).then((res) => {
+      const {
+        datafrom,
+        qdlx,
+        rwlx,
+        type,
+        blbm,
+        realname,
+        mobile,
+        blryuid,
+        blryname,
+        content,
+        gis,
+        wcsx,
+        statetext,
+        result,
+      } = res.data;
+      this.datafrom = datafrom;
+      this.qdlx = qdlx;
+      this.rwlx = rwlx;
+      this.type = type;
+      this.blbm = blbm;
+      this.realname = realname;
+      this.mobile = mobile;
+      this.blryuid = blryuid;
+      this.blryname = blryname;
+      this.content = content;
+      this.gis = gis;
+      this.currentDate = wcsx;
+      this.statetext = statetext;
+      this.result = result;
+    });
+    getEventattList(this.id).then((res) => {
+      res.data.forEach((item) => {
+        if (item.atttype === "上报") {
+          this.base64.push(item.base64);
+          this.$refs["filesSelect"].images = this.base64;
+        } else {
+          this.base642.push(item.base64);
+          this.$refs["filesSelectTow"].images = this.base642;
+        }
+      });
+    });
+
     getSjlx().then((res) => {
       this.eventCol = res.data.split(",");
     });
@@ -279,12 +348,15 @@ export default {
     getBlbm().then((res) => {
       this.blbmCol = res.data.split(",");
     });
-    currentPage(4, "新增任务", "/taskFrom");
+    currentPage(6, "修改任务", "/editTask");
   },
   methods: {
     ...mapMutations([, "setStatus"]),
     onSendFiles(flies) {
       this.base64 = flies;
+    },
+    onSendFilesTow(flies) {
+      this.base642 = flies;
     },
     onConfirm(value) {
       switch (this.currentCell) {
@@ -378,6 +450,7 @@ export default {
     },
     onSubmit() {
       const data = {
+        eventid: this.id,
         datafrom: this.datafrom,
         rwlx: this.rwlx,
         qdlx: this.qdlx,
@@ -391,6 +464,7 @@ export default {
         gis: this.gis,
         // base64: this.base64,
         wcsx: this.currentDate,
+        result: this.result,
       };
 
       const validator = new Schema(this.descriptor);
@@ -401,6 +475,7 @@ export default {
           });
         } else {
           if (this.base64.length) data["base64"] = this.base64;
+          if (this.base642.length) data["base64_2"] = this.base64;
           if (this.isLoading) return;
 
           dd.showLoading({
@@ -409,26 +484,19 @@ export default {
             this.isLoading = true;
           });
           this.isLoading = true;
-          saveFromzzd(data).then((res) => {
-          //   dd.confirm({
-          //   title: "saveFromzzd",
+          updateEvent(data).then((res) => {
+            dd.hideLoading({}).then((res) => {});
 
-          //   message: JSON.stringify(res),
-          //   buttonLabels: ["ok", "cancel"],
-          // });
-            dd.hideLoading({}).then((res) => {
-              
-            });
             if (String(res.code) === "200") {
-                dd.toast({
-                  text: "提交成功", //提示信息
-                });
-                this.$router.replace("/home");
-              } else {
-                dd.toast({
-                  text: "提交失败", //提示信息
-                });
-              }
+              dd.toast({
+                text: "提交成功", //提示信息
+              });
+              this.$router.replace("/home");
+            } else {
+              dd.toast({
+                text: "提交失败", //提示信息
+              });
+            }
             this.isLoading = false;
           });
         }

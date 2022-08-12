@@ -1,7 +1,9 @@
 import axios from "axios";
-import { Promise } from "core-js";
 import app from "@/main.js";
+import { getStorageItem } from "@/util/jsapi";
+import config from "@/util/config.js";
 
+const {host} = config
 /**
  * axios
  * @param {Object} config 请求参数
@@ -10,46 +12,50 @@ import app from "@/main.js";
 
 const instance = axios.create({
   timeout: 1000 * 6,
+  // responseType:"blob",
   // 表示跨域请求时是否需要使用凭证
   // withCredentials: true, // default
 });
 
 // axios baseURL
-// instance.defaults.baseURL = process.env.VUE_APP_BASE_API
-instance.defaults.baseURL = "/api";
-// instance.defaults.baseURL = 'http://47.100.192.253:8101/api'
-// instance.defaults.baseURL ='https://zdyxs.dinghai.gov.cn:8101/api'
+// instance.defaults.baseURL = "/api";
+instance.defaults.baseURL = host
 
 // axios的全局配置
 instance.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
-
 instance.defaults.headers["Referer"] = "https://zjzwfw.com";
-
 //请求拦截
 instance.interceptors.request.use(
-  async (config) => {
+  (config) => {
     // app.$toast.success('成功文案');
-    const res = await dd.getStorageItem({ name: "user" });
-
+    // dd.confirm({
+    //   title: "user3",
+    //   message: JSON.stringify(config.headers),
+    //   buttonLabels: ["ok", "cancel"],
+    // });
+    const res = getStorageItem({ name: "user" }, "Public");
+    // const res = await dd.getStorageItem({ name: "user" });
+    
+    // config.headers["token"] = "123"
     if (JSON.stringify(res) !== "{}") {
-      const user = JSON.parse(res.value);
-
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-      config.headers["token"] = user.token;
-      // config.headers["referer"]= 'https://zjzwfw.com'
-      //   dd.confirm({
-      //   title: "user",
-      //   message: JSON.stringify(config.headers),
-      //   buttonLabels: ["ok", "cancel"],
-      // });
+      config.headers["token"] = res.token;
+    //   dd.confirm({
+    //   title: "user3",
+    //   message: JSON.stringify({1:res.token}),
+    //   buttonLabels: ["ok", "cancel"],
+    // });
     }
-
+    // dd.confirm({
+    //   title: "user3",
+    //   message: JSON.stringify({1:res,2:config.headers}),
+    //   buttonLabels: ["ok", "cancel"],
+    // });
     return config;
   },
-
   (error) => {
-    Promise.reject(error);
+    return error;
   }
 );
 
@@ -83,7 +89,7 @@ instance.interceptors.response.use(
     return res;
   },
   (error) => {
-    return Promise.reject(error);
+    return error;
   }
 );
 

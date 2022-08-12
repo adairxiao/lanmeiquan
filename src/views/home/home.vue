@@ -40,9 +40,9 @@
       </van-row>
     </div>
     <van-tabs :value="tabsActive" color="#1989fa" @click="onClickTabs" sticky>
-      <van-tab title="待受理" name="待受理" v-if="user.role === 'create'" >
+      <van-tab title="待受理" name="待受理" v-if="user.role === 'create'">
       </van-tab>
-      <van-tab title="处理中" name="处理中" v-if="user.role === 'create'" >
+      <van-tab title="处理中" name="处理中" v-if="user.role === 'create'">
       </van-tab>
       <van-tab
         title="已完成"
@@ -51,8 +51,8 @@
         title-class="title-right-line"
       >
       </van-tab>
-      <van-tab title="待处理" name="待处理" > </van-tab>
-      <van-tab title="已处理" name="已处理" ></van-tab>
+      <van-tab title="待处理" name="待处理"> </van-tab>
+      <van-tab title="已处理" name="已处理"></van-tab>
     </van-tabs>
     <div class="data-list">
       <van-list
@@ -76,7 +76,7 @@
                 @click="
                   $router.push({
                     name: 'SolveTask',
-                    query: { id: item.id, state: item.state ,tab: tabsActive},
+                    query: { id: item.id, state: item.state, tab: tabsActive },
                   })
                 "
                 v-show="queryType === 0"
@@ -85,12 +85,20 @@
               </div>
               <div
                 class="v-button"
+                :style="{ backgroundColor: item.cbzt === '1' ? '#ccc' : 'red' }"
+                @click="handleCuiBan(item, index)"
+                v-show="tabsActive === '处理中'"
+              >
+                催办
+              </div>
+              <div
+                class="v-button"
                 @click="
                   $router.push({ name: 'TaskDetails', query: { id: item.id } })
                 "
                 v-show="tabsActive === '处理中'"
               >
-                查看详情
+                查看
               </div>
               <div
                 class="v-button"
@@ -99,7 +107,18 @@
                 "
                 v-show="tabsActive === '已完成' || tabsActive === '已处理'"
               >
-                查看处理结果
+                查看
+              </div>
+
+              <div
+                class="v-button"
+                style="background-color:#1989fa"
+                @click="
+                  $router.push({name:'EditTask', query: { id: item.id } })
+                "
+                v-show="tabsActive === '已完成' || tabsActive === '处理中'"
+              >
+                <i class="el-icon-edit"></i>
               </div>
             </div>
           </div>
@@ -109,6 +128,8 @@
     <!-- <div class="footer-page">
       <Page :page="page" @onPre="onPre" @onToHome="onToHome" @onNext="onNext" />
     </div> -->
+
+    
   </div>
 </template>
 
@@ -120,7 +141,13 @@ import { Tab as VanTab, Tabs as VanTabs } from "vant";
 import { List as VanList } from "vant";
 import Page from "@/views/home/page.vue";
 import { mapState } from "vuex";
-import { getEventList, getEventTodo, getEventDone } from "@/network/api/api";
+import {currentPage} from "@/util/buryingPoint"
+import {
+  getEventList,
+  getEventTodo,
+  getEventDone,
+  cuiban,
+} from "@/network/api/api";
 export default {
   data() {
     return {
@@ -128,10 +155,11 @@ export default {
       tabsActive: "待受理",
       loading: false,
       finished: false,
+      isLoading: false,
       page: {
         totalPages: 0,
         number: 0,
-        totalElements:0
+        totalElements: 0,
       },
       timeID: "",
     };
@@ -186,17 +214,10 @@ export default {
     this.data = [];
     this.tabsActive = this.user.role !== "create" ? "待处理" : "待受理";
     this.fetchList();
-    aplus_queue.push({
-      action: "aplus.sendPV",
-      arguments: [
-        {
-          is_auto: false,
-        },
-        {
-          page_name: "首页",
-        },
-      ],
-    });
+    
+
+    currentPage(1,"首页","/home")
+
   },
   methods: {
     fetchList() {
@@ -208,7 +229,7 @@ export default {
           this.page = {
             totalPages: res.data.totalPages,
             number: res.data.number,
-            totalElements:res.data.totalElements
+            totalElements: res.data.totalElements,
           };
 
           if (this.page.number + 1 >= this.page.totalPages) {
@@ -226,7 +247,7 @@ export default {
           this.page = {
             totalPages: res.data.totalPages,
             number: res.data.number,
-            totalElements:res.data.totalElements
+            totalElements: res.data.totalElements,
           };
 
           if (this.page.number + 1 >= this.page.totalPages) {
@@ -238,14 +259,14 @@ export default {
         });
       } else {
         getEventList({
-          type: this.queryType,
+          state: this.queryType,
           page: this.page.number,
         }).then((res) => {
           this.data.push(...res.data.content);
           this.page = {
             totalPages: res.data.totalPages,
             number: res.data.number,
-            totalElements:res.data.totalElements
+            totalElements: res.data.totalElements,
           };
 
           if (this.page.number + 1 >= this.page.totalPages) {
@@ -280,7 +301,37 @@ export default {
     onClickBtn() {
       this.$router.push("Form");
     },
-
+    handleCuiBan(item, index) {
+      if (this.isLoading) return;
+      if (item.cbzt === "1"){
+        dd.confirm({
+          title: "提示",
+          message: "已催办",
+          buttonLabels: ["确认"],
+        })
+        return;
+      }
+      this.isLoading = !this.isLoading;
+      dd.confirm({
+        title: "提示",
+        message: "是否催办？",
+        buttonLabels: ["确认", "取消"],
+      }).then((res) => {
+        if (!res.buttonIndex) {
+          cuiban(item.id).then((res) => {
+            // dd.confirm({
+            //   title: "hasLogin",
+            //   message: JSON.stringify({ 1:  }),
+            //   buttonLabels: ["ok", "cancel"],
+            // });
+            this.data[index].cbzt = "1";
+            this.isLoading = !this.isLoading;
+          });
+        } else {
+          this.isLoading = !this.isLoading;
+        }
+      });
+    },
     onPre() {
       this.fetchList();
     },
@@ -357,7 +408,7 @@ export default {
 }
 
 .data-list {
-  height: calc(100vh-500px);
+  height: calc(100vh-600px);
   overflow-y: scroll;
   padding-bottom: 80px;
 }

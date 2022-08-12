@@ -103,26 +103,27 @@
           show-word-limit
         />
         <div class="img-box ">
-          <div style="margin-bottom:10px;font-size: 14px;">现场情况图片:</div>
+          <div style="margin-bottom:10px;font-size: 14px;">现场情况:</div>
           <van-swipe :autoplay="3000" indicator-color="white">
-            <van-swipe-item v-for="img in imgs" :key="img.id">
+            <van-swipe-item v-for="(img,index) in spliCLImgs" :key="index" @click="handleClickimg(spliCLImgs,index)">
               <van-image
                 width="95%"
                 height="170"
-                :src="'http://47.100.192.253:8100/files/' + img.attpath"
+                :src="img"
+                fit="contain"
               />
             </van-swipe-item>
           </van-swipe>
         </div>
-
+        <!-- :src="'http://47.100.192.253:8100/files/' + img.attpath" -->
         <!-- <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit"
           >提交</van-button
         >
       </div> -->
-        <div class="img-box ">
+        <!-- <div class="img-box ">
           <div style="margin-bottom:10px;font-size: 14px;">处理情况</div>
-        </div>
+        </div> -->
         <!-- <van-steps direction="vertical" inactive-color="black">
         <van-step v-show="false">买家下单</van-step>
         <van-step v-for="item in nodeList" :key="item.id"> -->
@@ -149,6 +150,8 @@
 
         <!-- </van-step>
       </van-steps> -->
+
+      
         <div v-for="item in nodeList" :key="item.id">
           <van-field
             readonly
@@ -177,9 +180,21 @@
             :value="item.content"
             label="处理内容："
             type="textarea"
-            input-align="right"
             autosize
           />
+        </div>
+        <div class="img-box " v-show="from.state !== '1'">
+          <div style="margin-bottom:10px;font-size: 14px;">处理后现场情况:</div>
+          <van-swipe :autoplay="3000" indicator-color="white">
+            <van-swipe-item v-for="(img,index) in spliSBImgs" :key="index" @click="handleClickimg(spliSBImgs,index)">
+              <van-image
+                width="95%"
+                height="170"
+                :src="img"
+                fit="contain"
+              />
+            </van-swipe-item>
+          </van-swipe>
         </div>
       </van-form>
       <div style="height:80px"></div>
@@ -193,12 +208,16 @@ import { Field as VanField } from "vant";
 import { Button as VanButton } from "vant";
 import { Image as VanImage } from "vant";
 import { Swipe as VanSwipe, SwipeItem as VanSwipeItem } from "vant";
-import { Tag as vanTag } from "vant";
+import { Tag as vanTag  ,ImagePreview} from "vant";
 import { Steps as vanSteps, Step as vanStep } from "vant";
 import { getEvenDetail, getEventattList, getNodeList } from "@/network/api/api";
+import config from '@/util/config.js'
+import {currentPage} from "@/util/buryingPoint"
+const {imgPath} =config
 export default {
   data() {
     return {
+      src: imgPath,
       id: "",
       from: {
         type: "",
@@ -210,9 +229,18 @@ export default {
         content: "",
       },
       currentDate: "",
-      imgs: [],
+      clImgs: [],
+      sbImgs: [],
       nodeList: [],
     };
+  },
+  computed:{
+    spliCLImgs() {
+      return this.clImgs.map((img) => this.src + img.attpath);
+    },
+    spliSBImgs() {
+      return this.sbImgs.map((img) => this.src + img.attpath);
+    },
   },
   components: {
     VanForm,
@@ -224,17 +252,29 @@ export default {
     vanSteps,
     vanStep,
     vanTag,
+    
   },
   mounted() {
     this.id = this.$route.query.id;
 
     getEvenDetail(this.id).then((res) => {
       this.from = res.data;
+      // dd.confirm({
+      //     title: "hasLogin",
+      //     message: JSON.stringify({ 1: this.from }),
+      //     buttonLabels: ["ok", "cancel"],
+      //   });
       this.currentDate = res.data.wcsx;
     });
 
     getEventattList(this.id).then((res) => {
-      this.imgs = res.data;
+      this.clImgs = res.data.filter(img=>img.atttype!=='处理');
+      this.sbImgs = res.data.filter(img=>img.atttype!=='上报');
+      // dd.confirm({
+      //     title: "hasLogin",
+      //     message: JSON.stringify({ 1: this.src + this.clImgs[0].attpath }),
+      //     buttonLabels: ["ok", "cancel"],
+      //   });
     });
 
     getNodeList(this.id).then((res) => {
@@ -251,10 +291,24 @@ export default {
         },
       ],
     });
+    currentPage(3,"查看事件详情","/taskDetails")
   },
 
   methods: {
     onSubmit() {},
+    handleClickimg(imgs,index){
+      ImagePreview({
+        images: imgs,
+        startPosition: index,
+        closeable: true,
+        swipeDuration:0,
+        loop:false,
+        transition:'',
+        overlayStyle: {
+          animation:'none'
+        },
+      })
+    }
   },
 };
 </script>

@@ -45,9 +45,7 @@ export const getEventActive = (data) => {
 };
 // 处理意见
 export const eventCommit = (data) => {
-  return request
-    .post(`/event/commit?${qs.stringify(data)}`)
-    .then((res) => res.data);
+  return request.post(`/event/commit`, data).then((res) => res.data);
 };
 
 // 处理节点信息列表
@@ -83,4 +81,49 @@ export const getRwlx = () => {
 // 清单类型
 export const getQdlx = () => {
   return request.get(`/sys/qdlx`).then((res) => res.data);
+};
+
+// 办理部门列表
+export const getBlbm = () => {
+  return request.get(`/sys/blbm`).then((res) => res.data);
+};
+
+// 催办按钮
+export const cuiban = (id) => {
+  return request.post(`/event/cuiban?eventid=${id}`).then((res) => res.data);
+};
+
+// state  0 待受理
+// state  1 待处理
+// state  2 处理完成
+export const exportFile = (data={}) => {
+  // return request.request({
+  //   method: "post",
+  //   url: "/event/excel",
+  //   data,
+  //   responseType: "blob",
+  //   headers: { "content-type": "application/json" },
+  // });
+  return request.get(`/event/excel?${qs.stringify(data)}`, {
+    // responseType: "blob",
+    responseType: "arraybuffer",
+    headers: { "content-type": "application/json" },
+  });
+};
+
+
+// 修改
+export const updateEvent = (data) => {
+  return request
+    .post(`/event/update`, JSON.stringify(data), {
+      transformRequest: [
+        function(data) {
+          return data;
+        },
+      ],
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => res.data);
 };

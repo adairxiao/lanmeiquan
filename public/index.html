@@ -7,13 +7,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
   <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
   <!-- <script src="https://g.alicdn.com/gdt/jsapi/1.9.18/index.js"></script> -->
-  <script src="https://g.alicdn.com/code/npm/@ali/dingtalk-h5-remote-debug-sdk/0.1.1/app.bundle.js"></script>
+  <!-- <script src="https://g.alicdn.com/code/npm/@ali/dingtalk-h5-remote-debug-sdk/0.1.1/app.bundle.js"></script>
   <script>
     h5RemoteDebugSdk.init({
       uuid: "ecda56ef-25a5-41ad-984b-0cfa6998d6d6",
       observerElement: document.documentElement,
     });
-  </script>
+  </script> -->
   <title>
     <%= htmlWebpackPlugin.options.title %>
   </title>
@@ -56,15 +56,19 @@
       arguments: ['appId', isAndroid ? '28302650' : isIOS ? '28328447' : '47130293']
     });
   </script>
+
+<script
+src='https://wpk-gate.zjzwfw.gov.cn/static/wpk-jssdk.1.0.2/wpkReporter.js'
+crossorigin='true'></script>
   <script>
     // 稳定性监控代码
     try {
-      constconfig = {
+      const config = {
         bid: 'dhglzdyxs_zzdpro', //唯一标识 需要去开发者后台获取
         signkey: '1234567890abcdef',
         gateway: 'https://wpk-gate.zjzwfw.gov.cn'
       };
-      constwpk = newwpkReporter(config);
+      const wpk = new wpkReporter(config);
       wpk.installAll();
       window._wpk = wpk;
     } catch (err) {
